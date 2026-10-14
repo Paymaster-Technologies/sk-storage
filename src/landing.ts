@@ -38,7 +38,8 @@ interface Strings {
   lead: string;
   /** Heading of the explainer card. */
   how: string;
-  what: string;
+  /** Bullet points of the explainer card. */
+  what: string[];
   user: string;
   /** Before the server address. */
   userHint: string;
@@ -67,10 +68,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Secret Keeper storage',
     lead: 'This host keeps cloud copies of Secret Keeper profiles.',
     how: 'How it works',
-    what:
-      'Every object here is encrypted on the device before it leaves it. The server stores ciphertext, ' +
-      'authenticates requests by an Ed25519 signature and takes no part in the cryptography: it cannot ' +
-      'read, merge or restore anything. There is nothing to see or log into on this page.',
+    what: [
+      'Every object here is encrypted on the device before it leaves it.',
+      'The server stores ciphertext, authenticates requests by an Ed25519 signature and takes no part in the cryptography: it cannot read, merge or restore anything.',
+      'There is nothing to see or log into on this page.',
+    ],
     user: 'Want to keep your copy here?',
     userHint: 'In the app open Settings → Cloud copy and paste this server address:',
     userNote: 'Devices on the same seed phrase sync through it on their own.',
@@ -91,10 +93,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Хранилище Secret Keeper',
     lead: 'Здесь живут облачные копии профилей Secret Keeper.',
     how: 'Как это работает',
-    what:
-      'Каждый объект шифруется на устройстве до того, как его покинет. Сервер хранит шифртекст, ' +
-      'проверяет подпись Ed25519 на запросах и в криптографии не участвует: прочитать, слить или ' +
-      'восстановить что-либо он не может. Смотреть и входить на этой странице некуда.',
+    what: [
+      'Каждый объект шифруется на устройстве до того, как его покинет.',
+      'Сервер хранит шифртекст, проверяет подпись Ed25519 на запросах и в криптографии не участвует: прочитать, слить или восстановить что-либо он не может.',
+      'Смотреть и входить на этой странице некуда.',
+    ],
     user: 'Хотите хранить копию здесь?',
     userHint: 'В приложении откройте Настройки → Облачная копия и вставьте адрес этого сервера:',
     userNote: 'Устройства с одной seed-фразой синхронизируются через него сами.',
@@ -115,10 +118,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Almacenamiento de Secret Keeper',
     lead: 'Aquí viven las copias en la nube de los perfiles de Secret Keeper.',
     how: 'Cómo funciona',
-    what:
-      'Cada objeto se cifra en el dispositivo antes de salir de él. El servidor guarda texto cifrado, ' +
-      'autentica las solicitudes con una firma Ed25519 y no participa en la criptografía: no puede leer, ' +
-      'fusionar ni restaurar nada. En esta página no hay nada que ver ni donde iniciar sesión.',
+    what: [
+      'Cada objeto se cifra en el dispositivo antes de salir de él.',
+      'El servidor guarda texto cifrado, autentica las solicitudes con una firma Ed25519 y no participa en la criptografía: no puede leer, fusionar ni restaurar nada.',
+      'En esta página no hay nada que ver ni donde iniciar sesión.',
+    ],
     user: '¿Quiere guardar su copia aquí?',
     userHint: 'En la aplicación abra Ajustes → Copia en la nube y pegue la dirección de este servidor:',
     userNote: 'Los dispositivos con la misma frase semilla se sincronizan a través de él por sí solos.',
@@ -139,10 +143,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Armazenamento do Secret Keeper',
     lead: 'Aqui ficam as cópias na nuvem dos perfis do Secret Keeper.',
     how: 'Como funciona',
-    what:
-      'Cada objeto é cifrado no dispositivo antes de sair dele. O servidor guarda texto cifrado, ' +
-      'autentica os pedidos por assinatura Ed25519 e não participa na criptografia: não consegue ler, ' +
-      'fundir nem restaurar nada. Nesta página não há nada para ver nem onde entrar.',
+    what: [
+      'Cada objeto é cifrado no dispositivo antes de sair dele.',
+      'O servidor guarda texto cifrado, autentica os pedidos por assinatura Ed25519 e não participa na criptografia: não consegue ler, fundir nem restaurar nada.',
+      'Nesta página não há nada para ver nem onde entrar.',
+    ],
     user: 'Quer guardar a sua cópia aqui?',
     userHint: 'Na aplicação abra Definições → Cópia na nuvem e cole o endereço deste servidor:',
     userNote: 'Os dispositivos com a mesma frase semente sincronizam-se através dele sozinhos.',
@@ -163,10 +168,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Stockage Secret Keeper',
     lead: 'Ici vivent les copies cloud des profils Secret Keeper.',
     how: 'Comment ça marche',
-    what:
-      "Chaque objet est chiffré sur l'appareil avant de le quitter. Le serveur stocke du texte chiffré, " +
-      'authentifie les requêtes par une signature Ed25519 et ne participe pas à la cryptographie : il ne peut ' +
-      "rien lire, fusionner ni restaurer. Il n'y a rien à voir ni où se connecter sur cette page.",
+    what: [
+      "Chaque objet est chiffré sur l'appareil avant de le quitter.",
+      'Le serveur stocke du texte chiffré, authentifie les requêtes par une signature Ed25519 et ne participe pas à la cryptographie : il ne peut rien lire, fusionner ni restaurer.',
+      "Il n'y a rien à voir ni où se connecter sur cette page.",
+    ],
     user: 'Vous voulez garder votre copie ici ?',
     userHint: "Dans l'application, ouvrez Réglages → Copie cloud et collez l'adresse de ce serveur :",
     userNote: "Les appareils partageant la même phrase de récupération se synchronisent via lui d'eux-mêmes.",
@@ -187,10 +193,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Secret Keeper depolama',
     lead: 'Secret Keeper profillerinin bulut kopyaları burada yaşar.',
     how: 'Nasıl çalışır',
-    what:
-      'Her nesne cihazdan ayrılmadan önce cihazda şifrelenir. Sunucu şifreli metni saklar, istekleri ' +
-      'Ed25519 imzasıyla doğrular ve kriptografiye katılmaz: hiçbir şeyi okuyamaz, birleştiremez veya geri ' +
-      'yükleyemez. Bu sayfada görülecek ya da giriş yapılacak bir şey yok.',
+    what: [
+      'Her nesne cihazdan ayrılmadan önce cihazda şifrelenir.',
+      'Sunucu şifreli metni saklar, istekleri Ed25519 imzasıyla doğrular ve kriptografiye katılmaz: hiçbir şeyi okuyamaz, birleştiremez veya geri yükleyemez.',
+      'Bu sayfada görülecek ya da giriş yapılacak bir şey yok.',
+    ],
     user: 'Kopyanızı burada tutmak ister misiniz?',
     userHint: 'Uygulamada Ayarlar → Bulut kopyası bölümünü açın ve bu sunucunun adresini yapıştırın:',
     userNote: 'Aynı tohum ifadesine sahip cihazlar onun üzerinden kendiliğinden eşitlenir.',
@@ -211,9 +218,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'تخزين Secret Keeper',
     lead: 'هنا تُحفظ النسخ السحابية لملفات Secret Keeper الشخصية.',
     how: 'كيف يعمل',
-    what:
-      'يُشفَّر كل كائن على الجهاز قبل أن يغادره. يخزّن الخادم النص المشفّر، ويتحقق من الطلبات بتوقيع Ed25519، ' +
-      'ولا يشارك في التشفير: لا يمكنه قراءة أي شيء أو دمجه أو استعادته. لا يوجد في هذه الصفحة ما يمكن مشاهدته أو تسجيل الدخول إليه.',
+    what: [
+      'يُشفَّر كل كائن على الجهاز قبل أن يغادره.',
+      'يخزّن الخادم النص المشفّر، ويتحقق من الطلبات بتوقيع Ed25519، ولا يشارك في التشفير: لا يمكنه قراءة أي شيء أو دمجه أو استعادته.',
+      'لا يوجد في هذه الصفحة ما يمكن مشاهدته أو تسجيل الدخول إليه.',
+    ],
     user: 'هل تريد حفظ نسختك هنا؟',
     userHint: 'في التطبيق افتح الإعدادات ← النسخة السحابية والصق عنوان هذا الخادم:',
     userNote: 'الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبره تلقائيًا.',
@@ -234,9 +243,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'فضای ذخیره‌سازی Secret Keeper',
     lead: 'نسخه‌های ابری پروفایل‌های Secret Keeper اینجا نگهداری می‌شوند.',
     how: 'چطور کار می‌کند',
-    what:
-      'هر شیء پیش از خروج از دستگاه روی همان دستگاه رمزگذاری می‌شود. سرور متن رمزشده را نگه می‌دارد، درخواست‌ها را با ' +
-      'امضای Ed25519 احراز می‌کند و در رمزنگاری نقشی ندارد: نمی‌تواند چیزی را بخواند، ادغام کند یا بازیابی کند. در این صفحه چیزی برای دیدن یا ورود وجود ندارد.',
+    what: [
+      'هر شیء پیش از خروج از دستگاه روی همان دستگاه رمزگذاری می‌شود.',
+      'سرور متن رمزشده را نگه می‌دارد، درخواست‌ها را با امضای Ed25519 احراز می‌کند و در رمزنگاری نقشی ندارد: نمی‌تواند چیزی را بخواند، ادغام کند یا بازیابی کند.',
+      'در این صفحه چیزی برای دیدن یا ورود وجود ندارد.',
+    ],
     user: 'می‌خواهید نسخه‌تان را اینجا نگه دارید؟',
     userHint: 'در برنامه تنظیمات ← نسخه ابری را باز کنید و نشانی این سرور را بچسبانید:',
     userNote: 'دستگاه‌هایی با یک عبارت بازیابی از طریق آن خودبه‌خود همگام می‌شوند.',
@@ -257,9 +268,11 @@ const STRINGS: Record<Lang, Strings> = {
     title: 'Secret Keeper স্টোরেজ',
     lead: 'Secret Keeper প্রোফাইলের ক্লাউড কপি এখানে থাকে।',
     how: 'এটি কীভাবে কাজ করে',
-    what:
-      'প্রতিটি অবজেক্ট ডিভাইস ছাড়ার আগে ডিভাইসেই এনক্রিপ্ট হয়। সার্ভার শুধু সাইফারটেক্সট রাখে, Ed25519 স্বাক্ষর দিয়ে অনুরোধ ' +
-      'যাচাই করে এবং ক্রিপ্টোগ্রাফিতে অংশ নেয় না: কিছু পড়তে, মেলাতে বা পুনরুদ্ধার করতে পারে না। এই পৃষ্ঠায় দেখার বা লগ ইন করার কিছু নেই।',
+    what: [
+      'প্রতিটি অবজেক্ট ডিভাইস ছাড়ার আগে ডিভাইসেই এনক্রিপ্ট হয়।',
+      'সার্ভার শুধু সাইফারটেক্সট রাখে, Ed25519 স্বাক্ষর দিয়ে অনুরোধ যাচাই করে এবং ক্রিপ্টোগ্রাফিতে অংশ নেয় না: কিছু পড়তে, মেলাতে বা পুনরুদ্ধার করতে পারে না।',
+      'এই পৃষ্ঠায় দেখার বা লগ ইন করার কিছু নেই।',
+    ],
     user: 'আপনার কপি এখানে রাখতে চান?',
     userHint: 'অ্যাপে সেটিংস → ক্লাউড কপি খুলুন এবং এই সার্ভারের ঠিকানা পেস্ট করুন:',
     userNote: 'একই সিড ফ্রেজের ডিভাইসগুলো এর মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
@@ -329,7 +342,7 @@ export function landingHtml(lang: Lang, origin: string): string {
 <link rel="icon" type="image/png" sizes="128x128" href="/icon-128.png">
 <link rel="apple-touch-icon" href="/icon-128.png">
 <style>
-:root{color-scheme:light dark;--bg:rgb(241,241,243);--item:rgb(252,252,255);--separator:rgb(228,228,231);--secondary:rgb(99,99,105);--text:rgb(1,1,2);--primary:rgb(50,106,251);--primary-soft:rgba(50,106,251,.12);--primary-legible:rgb(21,71,214);--warn:#e0a526;--danger:#de3b3b}
+:root{color-scheme:light dark;--bg:rgb(241,241,243);--item:rgb(252,252,255);--separator:rgb(228,228,231);--secondary:rgb(99,99,105);--text:rgb(1,1,2);--primary:rgb(50,106,251);--primary-soft:rgba(50,106,251,.12);--primary-legible:rgb(21,71,214);}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:rgb(1,1,2);--item:rgb(23,23,26);--separator:rgb(58,58,61);--secondary:rgb(153,153,158);--text:rgb(250,250,255);--primary-legible:rgb(151,180,253)}}
 :root[data-theme=dark]{--bg:rgb(1,1,2);--item:rgb(23,23,26);--separator:rgb(58,58,61);--secondary:rgb(153,153,158);--text:rgb(250,250,255);--primary-legible:rgb(151,180,253)}
 *{box-sizing:border-box}
@@ -337,7 +350,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system
 main{max-width:600px;width:100%}
 .cloud{display:block;margin:0 auto 20px;width:200px;height:140px}
 h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em;text-align:center}
-.lead{font-size:18px;margin:0 0 24px;color:var(--secondary);text-align:center}
+.lead{font-size:18px;margin:0 0 20px;color:var(--secondary);text-align:center}
 p{margin:0 0 16px}
 .cards{display:grid;gap:12px;margin:24px 0}
 .card{background:var(--item);border:1px solid var(--separator);border-radius:14px;padding:16px 18px}
@@ -352,13 +365,13 @@ p{margin:0 0 16px}
 .toast.show{opacity:1;transform:translateX(-50%)}
 a{color:var(--primary-legible);text-decoration:none}
 a:hover{text-decoration:underline}
-footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--separator);color:var(--secondary);font-size:14px}
-footer .row{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
-footer .row+.row{margin-top:4px}
+footer{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin-top:24px;padding-top:8px;border-top:1px solid var(--separator);color:var(--secondary);font-size:14px}
 footer .spacer{flex:1}
-.status[hidden]{display:none}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
-.status.down .dot{background:var(--danger)}.status.skew .dot{background:var(--warn)}
+.notice{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:color-mix(in srgb,#ffc107 18%,var(--bg));color:var(--text);font-size:15px;margin:0 0 24px}
+.notice[hidden]{display:none}
+.notice svg{flex:none;margin-top:1px}
+.card ul{margin:0;padding-inline-start:20px;color:var(--secondary);font-size:15px}
+.card li+li{margin-top:4px}
 .controls{display:flex;align-items:center;gap:4px}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:20px;color:var(--text);border:0;background:none;cursor:pointer;padding:0}
 .icon-btn:hover{background:var(--primary-soft)}
@@ -382,24 +395,21 @@ footer .spacer{flex:1}
 ${CLOUD_LOGO}
 <h1 data-i18n="title">${escape(t.title)}</h1>
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
+<div class="notice" id="status" hidden role="status"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg><span id="status-text"></span></div>
 <div class="cards">
-<section class="card"><h2 data-i18n="how">${escape(t.how)}</h2><p data-i18n="what">${escape(t.what)}</p></section>
+<section class="card"><h2 data-i18n="how">${escape(t.how)}</h2><ul id="what">${t.what.map((x) => `<li>${escape(x)}</li>`).join('')}</ul></section>
 <section class="card">
 <h2 data-i18n="user">${escape(t.user)}</h2>
 <p data-i18n="userHint">${escape(t.userHint)}</p>
 <div class="addr"><code id="addr">${escape(origin)}</code><button id="copy" class="icon-btn small" title="${escape(t.copy)}" aria-label="${escape(t.copy)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
 <p data-i18n="userNote">${escape(t.userNote)}</p>
 </section>
-<section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2><p><span data-i18n="devHint">${escape(t.devHint)}</span> <a href="${REPO}" data-i18n="devRepo">${escape(t.devRepo)}</a><span data-i18n="devStop">${t.devStop}</span> <span data-i18n="devRun">${escape(t.devRun)}</span></p></section>
+<section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2><p><span data-i18n="devHint">${escape(t.devHint)}</span> <a href="${REPO}" target="_blank" rel="noopener" data-i18n="devRepo">${escape(t.devRepo)}</a><span data-i18n="devStop">${t.devStop}</span> <span data-i18n="devRun">${escape(t.devRun)}</span></p></section>
 </div>
 <footer>
-<div class="row">
-<a id="link-protocol" href="${links[lang]!.protocol}" data-i18n="protocol">${escape(t.protocol)}</a>
-<a id="link-site" href="${links[lang]!.site}">secretkeeper.net</a>
+<a id="link-protocol" href="${links[lang]!.protocol}" target="_blank" rel="noopener" data-i18n="protocol">${escape(t.protocol)}</a>
+<a id="link-site" href="${links[lang]!.site}" target="_blank" rel="noopener">secretkeeper.net</a>
 <a href="mailto:${SUPPORT}">${SUPPORT}</a>
-</div>
-<div class="row">
-<span class="status" id="status" hidden><span class="dot"></span><span id="status-text"></span></span>
 <span class="spacer"></span>
 <span class="controls">
 <details class="lang-dd" id="lang-dd">
@@ -412,7 +422,6 @@ ${LANGS.map((l) => (l.code === lang ? `<li><span class="lang-cur" data-lang="${l
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle id="theme-icon-sun" cx="12" cy="12" r="4"></circle><g id="theme-icon-rays"><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></g><path id="theme-icon-moon" d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" style="display:none"></path></svg>
 </button>
 </span>
-</div>
 </footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
@@ -431,15 +440,15 @@ var byId=function(c){for(var i=0;i<I.langs.length;i++)if(I.langs[i].code===c)ret
 // the host stops answering or its clock drifts from the client's (SKS1
 // rejects requests outside a 5 minute window; 30 s is the warning line).
 function renderStatus(){var t=I.strings[lang],s=$('status'),x=$('status-text');
-if(health===null){s.hidden=true;s.className='status';return}
-s.hidden=false;
-if(health==='down'){s.className='status down';x.textContent=t.down;return}
-s.className='status skew';x.textContent=t.skew.replace('{s}',String(health));}
+if(health===null){s.hidden=true;return}
+s.hidden=false;x.textContent=health==='down'?t.down:t.skew.replace('{s}',String(health));}
 // Language: the server rendered Accept-Language's pick; a manual choice
 // (localStorage 'lang') wins over it, as on the site.
 function applyLang(code){var t=I.strings[code];if(!t)return;lang=code;
 root.lang=code;root.dir=(byId(code)||{}).dir||'ltr';document.title=t.title;
 document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t[el.dataset.i18n]});
+$('what').innerHTML=t.what.map(function(x){return '<li></li>'}).join('');
+Array.prototype.forEach.call($('what').children,function(li,i){li.textContent=t.what[i]});
 $('link-protocol').href=I.links[code].protocol;$('link-site').href=I.links[code].site;
 var sum=$('lang-summary');sum.setAttribute('aria-label',t.langSwitch);sum.title=t.langSwitch;
 sum.firstChild.textContent=code.charAt(0).toUpperCase()+code.slice(1)+' ';

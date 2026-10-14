@@ -1,5 +1,7 @@
 // HTTP layer: routes, authentication, quotas. No framework, node:http only.
 //
+//   GET    /                        landing page for humans (HTML, en/ru by Accept-Language)
+//   GET    /robots.txt, /.well-known/security.txt
 //   GET    /healthz                 liveness, unauthenticated
 //   GET    /v1/list                 [{path,size,etag,mtime}]
 //   GET    /v1/usage                {used, quota, maxObject}
@@ -17,6 +19,7 @@ import { pipeline } from 'node:stream/promises';
 
 import { type AuthFailure, type AuthPending, Authenticator, EMPTY_BODY_SHA256 } from './auth.js';
 import type { Config } from './config.js';
+import { landingHtml, pickLanguage, ROBOTS_TXT, securityTxt } from './landing.js';
 import { parseObjectPath } from './paths.js';
 import { type Backend, TooLargeError } from './store/backend.js';
 
@@ -76,6 +79,18 @@ export function createApp(opts: AppOptions): Handler {
     res.end(text);
   };
   const fail = (res: ServerResponse, e: HttpError) => json(res, e.status, { error: e.code, message: e.message });
+  // Static, cacheable documents (landing page, robots.txt, security.txt).
+  const text = (res: ServerResponse, method: string, body: string, contentType: string, extra: Record<string, string> = {}) => {
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': Buffer.byteLength(body),
+      'Cache-Control': 'public, max-age=3600',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'no-referrer',
+      ...extra,
+    });
+    res.end(method === 'HEAD' ? undefined : body);
+  };
   const authFail = (reason: AuthFailure) => new HttpError(401, `auth-${reason}`, AUTH_STATUS[reason]);
 
   const headerMap = (req: IncomingMessage): Record<string, string | undefined> => {
@@ -145,6 +160,22 @@ export function createApp(opts: AppOptions): Handler {
     if (url.pathname === '/healthz' && (method === 'GET' || method === 'HEAD')) {
       json(res, 200, { ok: true, time: now() });
       return;
+    }
+    if (method === 'GET' || method === 'HEAD') {
+      // Pages for people and crawlers; everything else stays JSON for API clients.
+      if (url.pathname === '/') {
+        const lang = pickLanguage(req.headers['accept-language']);
+        text(res, method, landingHtml(lang), 'text/html; charset=utf-8', { Vary: 'Accept-Language', 'Content-Language': lang });
+        return;
+      }
+      if (url.pathname === '/robots.txt') {
+        text(res, method, ROBOTS_TXT, 'text/plain; charset=utf-8');
+        return;
+      }
+      if (url.pathname === '/.well-known/security.txt') {
+        text(res, method, securityTxt(now()), 'text/plain; charset=utf-8');
+        return;
+      }
     }
 
     if (url.pathname === '/v1/list' && method === 'GET') {

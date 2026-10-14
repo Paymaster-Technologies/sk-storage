@@ -83,6 +83,7 @@ percent-encoded: `/v1/o/.storage/records.sk1e`.
 
 | Request | Result |
 |---|---|
+| `GET /` | landing page for people (HTML, English or Russian by `Accept-Language`); also `/robots.txt` (disallow all) and `/.well-known/security.txt` |
 | `GET /healthz` | `{"ok":true,"time":…}`, no auth |
 | `GET /v1/list` | `[{"path","size","etag","mtime"}]` sorted by path |
 | `GET /v1/usage` | `{"used","quota","maxObject"}` in bytes |

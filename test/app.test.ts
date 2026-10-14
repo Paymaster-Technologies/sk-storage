@@ -54,6 +54,49 @@ describe('storage server', () => {
     expect((await r.json()).ok).toBe(true);
   });
 
+  it('serves the landing page at / in English by default and Russian on request', async () => {
+    const en = await fetch(`${base}/`);
+    expect(en.status).toBe(200);
+    expect(en.headers.get('content-type')).toBe('text/html; charset=utf-8');
+    expect(en.headers.get('content-language')).toBe('en');
+    expect(en.headers.get('vary')).toBe('Accept-Language');
+    expect(en.headers.get('cache-control')).toBe('public, max-age=3600');
+    const html = await en.text();
+    expect(html).toContain('<html lang="en">');
+    expect(html).toContain('Secret Keeper storage');
+    expect(html).toContain('https://secretkeeper.net/protocol');
+
+    const ru = await fetch(`${base}/`, { headers: { 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.5' } });
+    expect(ru.headers.get('content-language')).toBe('ru');
+    const ruHtml = await ru.text();
+    expect(ruHtml).toContain('<html lang="ru">');
+    expect(ruHtml).toContain('https://secretkeeper.net/ru/protocol');
+
+    const head = await fetch(`${base}/`, { method: 'HEAD' });
+    expect(head.status).toBe(200);
+    expect(Number(head.headers.get('content-length'))).toBe(Buffer.byteLength(html));
+    expect(await head.text()).toBe('');
+  });
+
+  it('serves robots.txt and security.txt, other unknown paths stay JSON 404', async () => {
+    const robots = await fetch(`${base}/robots.txt`);
+    expect(robots.status).toBe(200);
+    expect(await robots.text()).toBe('User-agent: *\nDisallow: /\n');
+
+    const sec = await fetch(`${base}/.well-known/security.txt`);
+    expect(sec.status).toBe(200);
+    const body = await sec.text();
+    expect(body).toContain('Contact: mailto:support@secretkeeper.net');
+    expect(body).toMatch(/^Expires: \d{4}-\d{2}-\d{2}T/m);
+
+    const other = await fetch(`${base}/index.html`);
+    expect(other.status).toBe(404);
+    expect((await other.json()).error).toBe('not-found');
+    // The root is a page only for GET/HEAD: a PUT there is still an API 404.
+    const put = await fetch(`${base}/`, { method: 'PUT', body: 'x' });
+    expect(put.status).toBe(404);
+  });
+
   it('requires auth on /v1', async () => {
     const r = await fetch(`${base}/v1/list`);
     expect(r.status).toBe(401);

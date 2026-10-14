@@ -37,9 +37,14 @@ interface Strings {
   lead: string;
   what: string;
   user: string;
+  /** Before the server address. */
   userHint: string;
+  /** After the server address. */
+  userNote: string;
   dev: string;
   devHint: string;
+  copy: string;
+  copied: string;
   protocol: string;
   /** Shown only when the host does not answer. */
   down: string;
@@ -57,12 +62,13 @@ const STRINGS: Record<Lang, Strings> = {
       'Every object here is encrypted on the device before it leaves it. The server stores ciphertext, ' +
       'authenticates requests by an Ed25519 signature and takes no part in the cryptography: it cannot ' +
       'read, merge or restore anything. There is nothing to see or log into on this page.',
-    user: 'Using the app?',
-    userHint:
-      'Cloud copies are set up in the app: Settings → Cloud copy. Devices on the same seed phrase sync through this host on their own.',
-    dev: 'Running your own?',
-    devHint:
-      'The server is a single Node process with a small signed HTTP API (SKS1). Point the app at your host in the same settings screen.',
+    user: 'Want to keep your copy here?',
+    userHint: 'In the app open Settings → Cloud copy and paste this server address:',
+    userNote: 'Devices on the same seed phrase sync through it on their own.',
+    dev: 'Prefer your own server?',
+    devHint: 'This is a single Node process with a small signed HTTP API (SKS1). Run it on your host and put its address in the same settings screen.',
+    copy: 'Copy',
+    copied: 'Copied',
     protocol: 'Protocol',
     down: 'Storage is unreachable',
     skew: 'Server clock differs from yours by {s} s',
@@ -76,12 +82,13 @@ const STRINGS: Record<Lang, Strings> = {
       'Каждый объект шифруется на устройстве до того, как его покинет. Сервер хранит шифртекст, ' +
       'проверяет подпись Ed25519 на запросах и в криптографии не участвует: прочитать, слить или ' +
       'восстановить что-либо он не может. Смотреть и входить на этой странице некуда.',
-    user: 'Пользуетесь приложением?',
-    userHint:
-      'Облачная копия настраивается в приложении: Настройки → Облачная копия. Устройства с одной seed-фразой синхронизируются через этот хост сами.',
-    dev: 'Поднимаете свой?',
-    devHint:
-      'Сервер - один процесс Node с небольшим подписанным HTTP API (SKS1). Адрес своего хоста указывается в том же экране настроек.',
+    user: 'Хотите хранить копию здесь?',
+    userHint: 'В приложении откройте Настройки → Облачная копия и вставьте адрес этого сервера:',
+    userNote: 'Устройства с одной seed-фразой синхронизируются через него сами.',
+    dev: 'Хотите свой сервер?',
+    devHint: 'Это один процесс Node с небольшим подписанным HTTP API (SKS1). Поднимите его у себя и укажите в том же экране настроек свой адрес.',
+    copy: 'Копировать',
+    copied: 'Скопировано',
     protocol: 'Протокол',
     down: 'Хранилище недоступно',
     skew: 'Часы сервера расходятся с вашими на {s} с',
@@ -95,12 +102,13 @@ const STRINGS: Record<Lang, Strings> = {
       'Cada objeto se cifra en el dispositivo antes de salir de él. El servidor guarda texto cifrado, ' +
       'autentica las solicitudes con una firma Ed25519 y no participa en la criptografía: no puede leer, ' +
       'fusionar ni restaurar nada. En esta página no hay nada que ver ni donde iniciar sesión.',
-    user: '¿Usa la aplicación?',
-    userHint:
-      'La copia en la nube se configura en la aplicación: Ajustes → Copia en la nube. Los dispositivos con la misma frase semilla se sincronizan a través de este servidor por sí solos.',
-    dev: '¿Monta el suyo?',
-    devHint:
-      'El servidor es un único proceso de Node con una pequeña API HTTP firmada (SKS1). La dirección de su servidor se indica en la misma pantalla de ajustes.',
+    user: '¿Quiere guardar su copia aquí?',
+    userHint: 'En la aplicación abra Ajustes → Copia en la nube y pegue la dirección de este servidor:',
+    userNote: 'Los dispositivos con la misma frase semilla se sincronizan a través de él por sí solos.',
+    dev: '¿Prefiere su propio servidor?',
+    devHint: 'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1). Ejecútelo en su host e indique su dirección en la misma pantalla de ajustes.',
+    copy: 'Copiar',
+    copied: 'Copiado',
     protocol: 'Protocolo',
     down: 'El almacenamiento no está disponible',
     skew: 'El reloj del servidor difiere del suyo en {s} s',
@@ -114,12 +122,13 @@ const STRINGS: Record<Lang, Strings> = {
       'Cada objeto é cifrado no dispositivo antes de sair dele. O servidor guarda texto cifrado, ' +
       'autentica os pedidos por assinatura Ed25519 e não participa na criptografia: não consegue ler, ' +
       'fundir nem restaurar nada. Nesta página não há nada para ver nem onde entrar.',
-    user: 'Usa a aplicação?',
-    userHint:
-      'A cópia na nuvem configura-se na aplicação: Definições → Cópia na nuvem. Os dispositivos com a mesma frase semente sincronizam-se através deste servidor sozinhos.',
-    dev: 'Vai montar o seu?',
-    devHint:
-      'O servidor é um único processo Node com uma pequena API HTTP assinada (SKS1). O endereço do seu servidor indica-se no mesmo ecrã de definições.',
+    user: 'Quer guardar a sua cópia aqui?',
+    userHint: 'Na aplicação abra Definições → Cópia na nuvem e cole o endereço deste servidor:',
+    userNote: 'Os dispositivos com a mesma frase semente sincronizam-se através dele sozinhos.',
+    dev: 'Prefere o seu próprio servidor?',
+    devHint: 'É um único processo Node com uma pequena API HTTP assinada (SKS1). Execute-o no seu host e indique o seu endereço no mesmo ecrã de definições.',
+    copy: 'Copiar',
+    copied: 'Copiado',
     protocol: 'Protocolo',
     down: 'O armazenamento está indisponível',
     skew: 'O relógio do servidor difere do seu em {s} s',
@@ -133,12 +142,13 @@ const STRINGS: Record<Lang, Strings> = {
       "Chaque objet est chiffré sur l'appareil avant de le quitter. Le serveur stocke du texte chiffré, " +
       'authentifie les requêtes par une signature Ed25519 et ne participe pas à la cryptographie : il ne peut ' +
       "rien lire, fusionner ni restaurer. Il n'y a rien à voir ni où se connecter sur cette page.",
-    user: "Vous utilisez l'application ?",
-    userHint:
-      "La copie cloud se configure dans l'application : Réglages → Copie cloud. Les appareils partageant la même phrase de récupération se synchronisent via ce serveur d'eux-mêmes.",
-    dev: 'Vous hébergez le vôtre ?',
-    devHint:
-      "Le serveur est un seul processus Node avec une petite API HTTP signée (SKS1). L'adresse de votre serveur se saisit dans le même écran de réglages.",
+    user: 'Vous voulez garder votre copie ici ?',
+    userHint: "Dans l'application, ouvrez Réglages → Copie cloud et collez l'adresse de ce serveur :",
+    userNote: "Les appareils partageant la même phrase de récupération se synchronisent via lui d'eux-mêmes.",
+    dev: 'Vous préférez votre propre serveur ?',
+    devHint: "C'est un seul processus Node avec une petite API HTTP signée (SKS1). Lancez-le chez vous et saisissez son adresse dans le même écran de réglages.",
+    copy: 'Copier',
+    copied: 'Copié',
     protocol: 'Protocole',
     down: 'Le stockage est injoignable',
     skew: "L'horloge du serveur diffère de la vôtre de {s} s",
@@ -152,12 +162,13 @@ const STRINGS: Record<Lang, Strings> = {
       'Her nesne cihazdan ayrılmadan önce cihazda şifrelenir. Sunucu şifreli metni saklar, istekleri ' +
       'Ed25519 imzasıyla doğrular ve kriptografiye katılmaz: hiçbir şeyi okuyamaz, birleştiremez veya geri ' +
       'yükleyemez. Bu sayfada görülecek ya da giriş yapılacak bir şey yok.',
-    user: 'Uygulamayı mı kullanıyorsunuz?',
-    userHint:
-      'Bulut kopyası uygulamada ayarlanır: Ayarlar → Bulut kopyası. Aynı tohum ifadesine sahip cihazlar bu sunucu üzerinden kendiliğinden eşitlenir.',
-    dev: 'Kendi sunucunuzu mu kuruyorsunuz?',
-    devHint:
-      'Sunucu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir. Kendi sunucunuzun adresi aynı ayar ekranında girilir.',
+    user: 'Kopyanızı burada tutmak ister misiniz?',
+    userHint: 'Uygulamada Ayarlar → Bulut kopyası bölümünü açın ve bu sunucunun adresini yapıştırın:',
+    userNote: 'Aynı tohum ifadesine sahip cihazlar onun üzerinden kendiliğinden eşitlenir.',
+    dev: 'Kendi sunucunuzu mu tercih edersiniz?',
+    devHint: 'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir. Kendi sunucunuzda çalıştırın ve adresini aynı ayar ekranına girin.',
+    copy: 'Kopyala',
+    copied: 'Kopyalandı',
     protocol: 'Protokol',
     down: 'Depolama erişilemiyor',
     skew: 'Sunucu saati sizinkinden {s} sn farklı',
@@ -170,12 +181,13 @@ const STRINGS: Record<Lang, Strings> = {
     what:
       'يُشفَّر كل كائن على الجهاز قبل أن يغادره. يخزّن الخادم النص المشفّر، ويتحقق من الطلبات بتوقيع Ed25519، ' +
       'ولا يشارك في التشفير: لا يمكنه قراءة أي شيء أو دمجه أو استعادته. لا يوجد في هذه الصفحة ما يمكن مشاهدته أو تسجيل الدخول إليه.',
-    user: 'هل تستخدم التطبيق؟',
-    userHint:
-      'تُضبط النسخة السحابية في التطبيق: الإعدادات ← النسخة السحابية. الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبر هذا الخادم تلقائيًا.',
-    dev: 'هل تشغّل خادمك الخاص؟',
-    devHint:
-      'الخادم عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1). يُدخل عنوان خادمك في شاشة الإعدادات نفسها.',
+    user: 'هل تريد حفظ نسختك هنا؟',
+    userHint: 'في التطبيق افتح الإعدادات ← النسخة السحابية والصق عنوان هذا الخادم:',
+    userNote: 'الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبره تلقائيًا.',
+    dev: 'تفضّل خادمك الخاص؟',
+    devHint: 'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1). شغّلها لديك وأدخل عنوانها في شاشة الإعدادات نفسها.',
+    copy: 'نسخ',
+    copied: 'تم النسخ',
     protocol: 'البروتوكول',
     down: 'التخزين غير متاح',
     skew: 'ساعة الخادم تختلف عن ساعتك بمقدار {s} ث',
@@ -188,12 +200,13 @@ const STRINGS: Record<Lang, Strings> = {
     what:
       'هر شیء پیش از خروج از دستگاه روی همان دستگاه رمزگذاری می‌شود. سرور متن رمزشده را نگه می‌دارد، درخواست‌ها را با ' +
       'امضای Ed25519 احراز می‌کند و در رمزنگاری نقشی ندارد: نمی‌تواند چیزی را بخواند، ادغام کند یا بازیابی کند. در این صفحه چیزی برای دیدن یا ورود وجود ندارد.',
-    user: 'از برنامه استفاده می‌کنید؟',
-    userHint:
-      'نسخه ابری در برنامه تنظیم می‌شود: تنظیمات ← نسخه ابری. دستگاه‌هایی با یک عبارت بازیابی از طریق این سرور خودبه‌خود همگام می‌شوند.',
-    dev: 'سرور خودتان را راه می‌اندازید؟',
-    devHint:
-      'سرور یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است. نشانی سرور خودتان در همان صفحه تنظیمات وارد می‌شود.',
+    user: 'می‌خواهید نسخه‌تان را اینجا نگه دارید؟',
+    userHint: 'در برنامه تنظیمات ← نسخه ابری را باز کنید و نشانی این سرور را بچسبانید:',
+    userNote: 'دستگاه‌هایی با یک عبارت بازیابی از طریق آن خودبه‌خود همگام می‌شوند.',
+    dev: 'سرور خودتان را ترجیح می‌دهید؟',
+    devHint: 'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است. آن را روی میزبان خود اجرا کنید و نشانی‌اش را در همان صفحه تنظیمات وارد کنید.',
+    copy: 'کپی',
+    copied: 'کپی شد',
     protocol: 'پروتکل',
     down: 'فضای ذخیره‌سازی در دسترس نیست',
     skew: 'ساعت سرور {s} ثانیه با ساعت شما تفاوت دارد',
@@ -206,12 +219,13 @@ const STRINGS: Record<Lang, Strings> = {
     what:
       'প্রতিটি অবজেক্ট ডিভাইস ছাড়ার আগে ডিভাইসেই এনক্রিপ্ট হয়। সার্ভার শুধু সাইফারটেক্সট রাখে, Ed25519 স্বাক্ষর দিয়ে অনুরোধ ' +
       'যাচাই করে এবং ক্রিপ্টোগ্রাফিতে অংশ নেয় না: কিছু পড়তে, মেলাতে বা পুনরুদ্ধার করতে পারে না। এই পৃষ্ঠায় দেখার বা লগ ইন করার কিছু নেই।',
-    user: 'অ্যাপ ব্যবহার করছেন?',
-    userHint:
-      'ক্লাউড কপি অ্যাপে সেট করা হয়: সেটিংস → ক্লাউড কপি। একই সিড ফ্রেজের ডিভাইসগুলো এই সার্ভারের মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
-    dev: 'নিজের সার্ভার চালাচ্ছেন?',
-    devHint:
-      'সার্ভারটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস। নিজের সার্ভারের ঠিকানা একই সেটিংস স্ক্রিনে দিতে হয়।',
+    user: 'আপনার কপি এখানে রাখতে চান?',
+    userHint: 'অ্যাপে সেটিংস → ক্লাউড কপি খুলুন এবং এই সার্ভারের ঠিকানা পেস্ট করুন:',
+    userNote: 'একই সিড ফ্রেজের ডিভাইসগুলো এর মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
+    dev: 'নিজের সার্ভার চান?',
+    devHint: 'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস। নিজের হোস্টে চালান এবং এর ঠিকানা একই সেটিংস স্ক্রিনে দিন।',
+    copy: 'কপি করুন',
+    copied: 'কপি হয়েছে',
     protocol: 'প্রোটোকল',
     down: 'স্টোরেজ পাওয়া যাচ্ছে না',
     skew: 'সার্ভারের ঘড়ি আপনার ঘড়ির থেকে {s} সেকেন্ড আলাদা',
@@ -254,7 +268,8 @@ const CLOUD_LOGO = `<svg class="cloud" viewBox="0 0 200 140" width="200" height=
 <image href="/icon-128.png" x="64" y="36" width="72" height="72"/>
 </svg>`;
 
-export function landingHtml(lang: Lang): string {
+/** [origin] is the address the app should be pointed at (scheme + host, no path). */
+export function landingHtml(lang: Lang, origin: string): string {
   const t = STRINGS[lang];
   const dir = LANGS.find((l) => l.code === lang)?.dir ?? 'ltr';
   const links = Object.fromEntries(LANGS.map((l) => [l.code, { protocol: siteUrl(l.code, '/protocol'), site: siteUrl(l.code, '/') }]));
@@ -284,6 +299,13 @@ p{margin:0 0 16px}
 .card{background:var(--item);border:1px solid var(--separator);border-radius:14px;padding:16px 18px}
 .card h2{font-size:16px;margin:0 0 6px}
 .card p{margin:0;color:var(--secondary);font-size:15px}
+.card p+p{margin-top:8px}
+.addr{display:flex;align-items:center;gap:6px;margin:8px 0;padding:6px 6px 6px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--separator)}
+.addr code{flex:1;font:14px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--text);overflow-wrap:anywhere;direction:ltr;text-align:start}
+.icon-btn.small{width:32px;height:32px;border-radius:16px;color:var(--secondary)}
+.icon-btn.small:hover{color:var(--text)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);padding:8px 14px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+.toast.show{opacity:1;transform:translateX(-50%)}
 a{color:var(--primary-legible);text-decoration:none}
 a:hover{text-decoration:underline}
 footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--separator);color:var(--secondary);font-size:14px}
@@ -318,7 +340,12 @@ ${CLOUD_LOGO}
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
 <p data-i18n="what">${escape(t.what)}</p>
 <div class="cards">
-<section class="card"><h2 data-i18n="user">${escape(t.user)}</h2><p data-i18n="userHint">${escape(t.userHint)}</p></section>
+<section class="card">
+<h2 data-i18n="user">${escape(t.user)}</h2>
+<p data-i18n="userHint">${escape(t.userHint)}</p>
+<div class="addr"><code id="addr">${escape(origin)}</code><button id="copy" class="icon-btn small" title="${escape(t.copy)}" aria-label="${escape(t.copy)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
+<p data-i18n="userNote">${escape(t.userNote)}</p>
+</section>
 <section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2><p data-i18n="devHint">${escape(t.devHint)}</p></section>
 </div>
 <footer>
@@ -344,6 +371,7 @@ ${LANGS.map((l) => (l.code === lang ? `<li><span class="lang-cur" data-lang="${l
 </div>
 </footer>
 </main>
+<div class="toast" id="toast" role="status"></div>
 <script id="i18n" type="application/json">${i18n.replace(/</g, '\\u003c')}</script>
 <script>
 (function(){
@@ -375,12 +403,26 @@ $('lang-list').innerHTML=I.langs.map(function(l){return l.code===code
 ?'<li><span class="lang-cur" data-lang="'+l.code+'" aria-current="true">'+l.label+'</span></li>'
 :'<li><a href="#" data-lang="'+l.code+'">'+l.label+'</a></li>'}).join('');
 var tb=$('theme-toggle');tb.title=t.themeToggle;tb.setAttribute('aria-label',t.themeToggle);
+var cb=$('copy');cb.title=t.copy;cb.setAttribute('aria-label',t.copy);
 renderStatus();}
 var dd=$('lang-dd');
 dd.addEventListener('click',function(e){var a=e.target.closest('a[data-lang]');if(!a)return;
 e.preventDefault();localStorage.setItem('lang',a.dataset.lang);applyLang(a.dataset.lang);dd.removeAttribute('open');});
 document.addEventListener('click',function(e){if(dd.hasAttribute('open')&&!dd.contains(e.target))dd.removeAttribute('open')});
 var saved=localStorage.getItem('lang');if(saved&&saved!==lang&&I.strings[saved])applyLang(saved);
+
+// Server address: what the browser actually connected to beats the
+// server's guess from the Host header (proxies, non-standard ports).
+var addr=$('addr');addr.textContent=location.origin;
+var toast=$('toast'),toastTimer;
+function selectAddr(){var r=document.createRange();r.selectNodeContents(addr);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);}
+$('copy').addEventListener('click',function(){
+navigator.clipboard.writeText(addr.textContent).then(function(){
+toast.textContent=I.strings[lang].copied;toast.classList.add('show');
+clearTimeout(toastTimer);toastTimer=setTimeout(function(){toast.classList.remove('show')},1600);})
+// Clipboard refused (no permission, insecure context): leave the address selected for Cmd/Ctrl+C.
+.catch(selectAddr);});
+addr.addEventListener('click',selectAddr);
 
 // Theme: click flips the visible one; system theme applies until the first click.
 var sun=$('theme-icon-sun'),rays=$('theme-icon-rays'),moon=$('theme-icon-moon');

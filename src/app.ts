@@ -61,6 +61,19 @@ const CORS = {
   'Access-Control-Max-Age': '600',
 };
 
+/**
+ * Scheme + host the client used, for the "paste this address" block of the
+ * landing page. Behind the reverse proxy the scheme comes from
+ * X-Forwarded-Proto; the page itself prefers location.origin once scripts run.
+ */
+export function requestOrigin(req: IncomingMessage): string {
+  const forwarded = req.headers['x-forwarded-proto'];
+  const proto = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim();
+  const scheme = proto === 'http' || proto === 'https' ? proto : 'encrypted' in req.socket && req.socket.encrypted ? 'https' : 'http';
+  const host = req.headers.host ?? 'localhost';
+  return `${scheme}://${host}`;
+}
+
 export function createApp(opts: AppOptions): Handler {
   const { config, backend } = opts;
   const now = opts.now ?? Date.now;
@@ -171,7 +184,7 @@ export function createApp(opts: AppOptions): Handler {
       // Pages for people and crawlers; everything else stays JSON for API clients.
       if (url.pathname === '/') {
         const lang = pickLanguage(req.headers['accept-language']);
-        text(res, method, landingHtml(lang), 'text/html; charset=utf-8', { Vary: 'Accept-Language', 'Content-Language': lang });
+        text(res, method, landingHtml(lang, requestOrigin(req)), 'text/html; charset=utf-8', { Vary: 'Accept-Language', 'Content-Language': lang });
         return;
       }
       const icon = ICONS[url.pathname];

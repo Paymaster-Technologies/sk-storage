@@ -85,6 +85,10 @@ describe('storage server', () => {
     expect(html).toContain("e.code==='KeyZ'");
     expect(html).toContain("e.code==='KeyL'");
     expect(html).toContain('href="/icon-128.png"');
+    // The address to paste into the app: scheme and host of the request, X-Forwarded-Proto honoured.
+    expect(html).toContain(`<code id="addr">${base}</code>`);
+    const proxied = await fetch(`${base}/`, { headers: { 'X-Forwarded-Proto': 'https' } });
+    expect(await proxied.text()).toContain(`<code id="addr">${base.replace('http://', 'https://')}</code>`);
 
     const head = await fetch(`${base}/`, { method: 'HEAD' });
     expect(head.status).toBe(200);

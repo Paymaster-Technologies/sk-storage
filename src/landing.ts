@@ -41,10 +41,10 @@ interface Strings {
   dev: string;
   devHint: string;
   protocol: string;
-  status: string;
-  checking: string;
-  ok: string;
+  /** Shown only when the host does not answer. */
   down: string;
+  /** Shown only when server and client clocks disagree; `{s}` is the gap in seconds. */
+  skew: string;
   themeToggle: string;
   langSwitch: string;
 }
@@ -64,10 +64,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'The server is a single Node process with a small signed HTTP API (SKS1). Point the app at your host in the same settings screen.',
     protocol: 'Protocol',
-    status: 'Status',
-    checking: 'checking…',
-    ok: 'online',
-    down: 'unreachable',
+    down: 'Storage is unreachable',
+    skew: 'Server clock differs from yours by {s} s',
     themeToggle: 'Toggle color theme',
     langSwitch: 'Language',
   },
@@ -85,10 +83,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'Сервер - один процесс Node с небольшим подписанным HTTP API (SKS1). Адрес своего хоста указывается в том же экране настроек.',
     protocol: 'Протокол',
-    status: 'Статус',
-    checking: 'проверяем…',
-    ok: 'в сети',
-    down: 'недоступен',
+    down: 'Хранилище недоступно',
+    skew: 'Часы сервера расходятся с вашими на {s} с',
     themeToggle: 'Переключить тему',
     langSwitch: 'Язык',
   },
@@ -106,10 +102,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'El servidor es un único proceso de Node con una pequeña API HTTP firmada (SKS1). La dirección de su servidor se indica en la misma pantalla de ajustes.',
     protocol: 'Protocolo',
-    status: 'Estado',
-    checking: 'comprobando…',
-    ok: 'en línea',
-    down: 'no disponible',
+    down: 'El almacenamiento no está disponible',
+    skew: 'El reloj del servidor difiere del suyo en {s} s',
     themeToggle: 'Cambiar tema',
     langSwitch: 'Idioma',
   },
@@ -127,10 +121,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'O servidor é um único processo Node com uma pequena API HTTP assinada (SKS1). O endereço do seu servidor indica-se no mesmo ecrã de definições.',
     protocol: 'Protocolo',
-    status: 'Estado',
-    checking: 'a verificar…',
-    ok: 'online',
-    down: 'indisponível',
+    down: 'O armazenamento está indisponível',
+    skew: 'O relógio do servidor difere do seu em {s} s',
     themeToggle: 'Alternar tema',
     langSwitch: 'Idioma',
   },
@@ -148,10 +140,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       "Le serveur est un seul processus Node avec une petite API HTTP signée (SKS1). L'adresse de votre serveur se saisit dans le même écran de réglages.",
     protocol: 'Protocole',
-    status: 'État',
-    checking: 'vérification…',
-    ok: 'en ligne',
-    down: 'injoignable',
+    down: 'Le stockage est injoignable',
+    skew: "L'horloge du serveur diffère de la vôtre de {s} s",
     themeToggle: 'Changer de thème',
     langSwitch: 'Langue',
   },
@@ -169,10 +159,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'Sunucu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir. Kendi sunucunuzun adresi aynı ayar ekranında girilir.',
     protocol: 'Protokol',
-    status: 'Durum',
-    checking: 'kontrol ediliyor…',
-    ok: 'çevrimiçi',
-    down: 'erişilemiyor',
+    down: 'Depolama erişilemiyor',
+    skew: 'Sunucu saati sizinkinden {s} sn farklı',
     themeToggle: 'Temayı değiştir',
     langSwitch: 'Dil',
   },
@@ -189,10 +177,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'الخادم عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1). يُدخل عنوان خادمك في شاشة الإعدادات نفسها.',
     protocol: 'البروتوكول',
-    status: 'الحالة',
-    checking: 'جارٍ التحقق…',
-    ok: 'متصل',
-    down: 'غير متاح',
+    down: 'التخزين غير متاح',
+    skew: 'ساعة الخادم تختلف عن ساعتك بمقدار {s} ث',
     themeToggle: 'تبديل السمة',
     langSwitch: 'اللغة',
   },
@@ -209,10 +195,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'سرور یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است. نشانی سرور خودتان در همان صفحه تنظیمات وارد می‌شود.',
     protocol: 'پروتکل',
-    status: 'وضعیت',
-    checking: 'در حال بررسی…',
-    ok: 'آنلاین',
-    down: 'در دسترس نیست',
+    down: 'فضای ذخیره‌سازی در دسترس نیست',
+    skew: 'ساعت سرور {s} ثانیه با ساعت شما تفاوت دارد',
     themeToggle: 'تغییر پوسته',
     langSwitch: 'زبان',
   },
@@ -229,10 +213,8 @@ const STRINGS: Record<Lang, Strings> = {
     devHint:
       'সার্ভারটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস। নিজের সার্ভারের ঠিকানা একই সেটিংস স্ক্রিনে দিতে হয়।',
     protocol: 'প্রোটোকল',
-    status: 'অবস্থা',
-    checking: 'পরীক্ষা চলছে…',
-    ok: 'অনলাইন',
-    down: 'পাওয়া যাচ্ছে না',
+    down: 'স্টোরেজ পাওয়া যাচ্ছে না',
+    skew: 'সার্ভারের ঘড়ি আপনার ঘড়ির থেকে {s} সেকেন্ড আলাদা',
     themeToggle: 'থিম বদলান',
     langSwitch: 'ভাষা',
   },
@@ -288,7 +270,7 @@ export function landingHtml(lang: Lang): string {
 <link rel="icon" type="image/png" sizes="128x128" href="/icon-128.png">
 <link rel="apple-touch-icon" href="/icon-128.png">
 <style>
-:root{color-scheme:light dark;--bg:rgb(241,241,243);--item:rgb(252,252,255);--separator:rgb(228,228,231);--secondary:rgb(99,99,105);--text:rgb(1,1,2);--primary:rgb(50,106,251);--primary-soft:rgba(50,106,251,.12);--primary-legible:rgb(21,71,214);--ok:#4caf50;--danger:#de3b3b}
+:root{color-scheme:light dark;--bg:rgb(241,241,243);--item:rgb(252,252,255);--separator:rgb(228,228,231);--secondary:rgb(99,99,105);--text:rgb(1,1,2);--primary:rgb(50,106,251);--primary-soft:rgba(50,106,251,.12);--primary-legible:rgb(21,71,214);--warn:#e0a526;--danger:#de3b3b}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:rgb(1,1,2);--item:rgb(23,23,26);--separator:rgb(58,58,61);--secondary:rgb(153,153,158);--text:rgb(250,250,255);--primary-legible:rgb(151,180,253)}}
 :root[data-theme=dark]{--bg:rgb(1,1,2);--item:rgb(23,23,26);--separator:rgb(58,58,61);--secondary:rgb(153,153,158);--text:rgb(250,250,255);--primary-legible:rgb(151,180,253)}
 *{box-sizing:border-box}
@@ -308,8 +290,9 @@ footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--separator);co
 footer .row{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
 footer .row+.row{margin-top:4px}
 footer .spacer{flex:1}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--secondary);margin-inline-end:6px;vertical-align:middle}
-.dot.ok{background:var(--ok)}.dot.down{background:var(--danger)}
+.status[hidden]{display:none}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
+.status.down .dot{background:var(--danger)}.status.skew .dot{background:var(--warn)}
 .controls{display:flex;align-items:center;gap:4px}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:20px;color:var(--text);border:0;background:none;cursor:pointer;padding:0}
 .icon-btn:hover{background:var(--primary-soft)}
@@ -345,7 +328,7 @@ ${CLOUD_LOGO}
 <a href="mailto:${SUPPORT}">${SUPPORT}</a>
 </div>
 <div class="row">
-<span><span class="dot" id="dot"></span><span id="status">${escape(t.status)}: ${escape(t.checking)}</span></span>
+<span class="status" id="status" hidden><span class="dot"></span><span id="status-text"></span></span>
 <span class="spacer"></span>
 <span class="controls">
 <details class="lang-dd" id="lang-dd">
@@ -365,15 +348,23 @@ ${LANGS.map((l) => (l.code === lang ? `<li><span class="lang-cur" data-lang="${l
 <script>
 (function(){
 var I=JSON.parse(document.getElementById('i18n').textContent);
-var root=document.documentElement,lang=root.lang,health=null;
+var root=document.documentElement,lang=root.lang;
+// Health: null = not checked yet / fine, 'down' = no answer, number = clock gap in seconds.
+var health=null;
 var $=function(id){return document.getElementById(id)};
 var byId=function(c){for(var i=0;i<I.langs.length;i++)if(I.langs[i].code===c)return I.langs[i];return null};
 
+// Status line is silent while everything is fine: the page comes from the
+// same process as /healthz, so "online" would say nothing. It appears when
+// the host stops answering or its clock drifts from the client's (SKS1
+// rejects requests outside a 5 minute window; 30 s is the warning line).
+function renderStatus(){var t=I.strings[lang],s=$('status'),x=$('status-text');
+if(health===null){s.hidden=true;s.className='status';return}
+s.hidden=false;
+if(health==='down'){s.className='status down';x.textContent=t.down;return}
+s.className='status skew';x.textContent=t.skew.replace('{s}',String(health));}
 // Language: the server rendered Accept-Language's pick; a manual choice
 // (localStorage 'lang') wins over it, as on the site.
-function renderStatus(){var t=I.strings[lang],d=$('dot'),s=$('status');
-d.className='dot '+(health===null?'':health?'ok':'down');
-s.textContent=t.status+': '+(health===null?t.checking:health?t.ok:t.down);}
 function applyLang(code){var t=I.strings[code];if(!t)return;lang=code;
 root.lang=code;root.dir=(byId(code)||{}).dir||'ltr';document.title=t.title;
 document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t[el.dataset.i18n]});
@@ -407,8 +398,15 @@ if((e.metaKey||e.ctrlKey)&&e.shiftKey&&!e.altKey&&e.code==='KeyL'){e.preventDefa
 var i=I.langs.findIndex(function(l){return l.code===lang});var next=I.langs[(i+1)%I.langs.length].code;
 localStorage.setItem('lang',next);applyLang(next);}});
 
-fetch('/healthz',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){health=!!(j&&j.ok);renderStatus()})
-.catch(function(){health=false;renderStatus()});
+// Pulse: /healthz now, every 30 s, and when the tab becomes visible again.
+function check(){var t0=Date.now();
+fetch('/healthz',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+if(!j||!j.ok||typeof j.time!=='number'){health='down';renderStatus();return}
+var gap=Math.round((j.time-(t0+Date.now())/2)/1000);
+health=Math.abs(gap)>=30?gap:null;renderStatus();})
+.catch(function(){health='down';renderStatus()});}
+check();setInterval(check,30000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)check()});
 })();
 </script>
 </body>

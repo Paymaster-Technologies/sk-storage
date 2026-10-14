@@ -429,8 +429,9 @@ h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em;text-alig
 p{margin:0 0 16px}
 .cards{display:grid;gap:12px;margin:24px 0}
 .card{background:var(--item);border:1px solid var(--separator);border-radius:14px;padding:16px 18px}
-.card h2{font-size:16px;margin:0 0 6px}
-.card-icon{--icon-color:var(--primary);width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--icon-color) 12%,transparent);color:var(--icon-color);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.card header{display:flex;align-items:center;gap:12px;margin:0 0 8px}
+.card h2{font-size:16px;margin:0}
+.card-icon{--icon-color:var(--primary);flex:none;width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--icon-color) 12%,transparent);color:var(--icon-color);display:flex;align-items:center;justify-content:center}
 .pill,.addr{display:inline-block;border-radius:999px;background:color-mix(in srgb,var(--text) 10%,transparent);color:var(--text);padding:0 8px;line-height:1.6}
 .pill{white-space:nowrap}
 .addr{display:inline-flex;align-items:center;gap:2px;max-width:100%;padding:0 2px 0 10px;vertical-align:middle;margin-top:4px}
@@ -473,9 +474,9 @@ ${CLOUD_LOGO}
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
 <div class="notice" id="status" hidden role="status"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg><span id="status-text"></span></div>
 <div class="cards">
-<section class="card">${cardIcon('how')}<h2 data-i18n="how">${escape(t.how)}</h2>${list('what', t.what)}</section>
-<section class="card">${cardIcon('user')}<h2 data-i18n="user">${escape(t.user)}</h2>${list('user-steps', t.userSteps)}</section>
-<section class="card">${cardIcon('dev')}<h2 data-i18n="dev">${escape(t.dev)}</h2>${list('dev-steps', t.devSteps)}</section>
+<section class="card"><header>${cardIcon('how')}<h2 data-i18n="how">${escape(t.how)}</h2></header>${list('what', t.what)}</section>
+<section class="card"><header>${cardIcon('user')}<h2 data-i18n="user">${escape(t.user)}</h2></header>${list('user-steps', t.userSteps)}</section>
+<section class="card"><header>${cardIcon('dev')}<h2 data-i18n="dev">${escape(t.dev)}</h2></header>${list('dev-steps', t.devSteps)}</section>
 </div>
 <footer>
 <a id="link-protocol" href="${links[lang]!.protocol}" target="_blank" rel="noopener" data-i18n="protocol">${escape(t.protocol)}</a>

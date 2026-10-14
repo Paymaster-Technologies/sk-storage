@@ -129,7 +129,9 @@ npm run dev         # tsx src/server.ts on :4323 with DATA_DIR=/data (set your o
 ```
 
 `deploy.sh` ships the sources to a Synology NAS over SSH and rebuilds the
-container there; it is specific to our setup but shows the steps.
+container there (`NAS=user@host ./deploy.sh`, or put `NAS` and `NAS_DIR`
+in a gitignored `.deploy.env`). It is written for DSM but shows the steps
+for any Docker host.
 
 ## Storage layout
 
@@ -141,3 +143,7 @@ DATA_DIR/<storage-id>/index.json   path → {size, etag, mtime}; rebuilt from o/
 
 Backups of `DATA_DIR` are plain files; the content is ciphertext the owner
 can decrypt with their seed phrase only.
+
+## License
+
+MIT, see [LICENSE](LICENSE).

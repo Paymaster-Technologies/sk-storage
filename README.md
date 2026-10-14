@@ -31,6 +31,7 @@ Without Docker: Node 22+, `npm ci && npm run build && DATA_DIR=./data npm start`
 | `QUOTA_BYTES` | `1GiB` | Byte budget per storage-id |
 | `MAX_OBJECT_BYTES` | `512MiB` | Largest single object |
 | `SKEW_MS` | `300000` | Tolerated clock difference, ms |
+| `MAX_STORAGE_IDS` | `0` (unlimited) | How many seeds the host serves; a family box set to `7` refuses the eighth |
 
 ## Protocol (SKS1)
 
@@ -96,7 +97,9 @@ percent-encoded: `/v1/o/.storage/records.sk1e`.
 `etag` is the lower-hex sha256 of the body. Errors are JSON
 `{"error": "<code>", "message": "…"}`: `401 auth-*` (missing headers, bad
 signature, replay, clock skew), `400 bad-path`, `404 not-found`,
-`412 precondition-failed`, `413 too-large` / `413 quota`.
+`412 precondition-failed`, `413 too-large` / `413 quota`, `403 ids-limit`
+(new storage-id on a host whose `MAX_STORAGE_IDS` slots are taken; ids that
+hold data keep working, `DELETE /v1/all` frees a slot).
 
 Uploads are streamed to a temporary file and renamed into place after the
 signature has been checked against the actual body hash, so a crash or a

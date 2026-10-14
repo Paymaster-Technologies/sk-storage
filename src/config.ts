@@ -11,6 +11,12 @@ export interface Config {
   maxObjectBytes: number;
   /** Accepted clock skew between client X-SK-Time and server time, ms. */
   skewMs: number;
+  /**
+   * How many storage-ids the host accepts; 0 = unlimited. A family box set
+   * to 7 answers `403 ids-limit` to the eighth seed; ids that already have
+   * data keep working and `DELETE /v1/all` frees the slot.
+   */
+  maxStorageIds: number;
 }
 
 const GIB = 1024 * 1024 * 1024;
@@ -27,6 +33,13 @@ function bytes(env: NodeJS.ProcessEnv, name: string, fallback: number): number {
   return n * mult;
 }
 
+function count(env: NodeJS.ProcessEnv, name: string, fallback: number): number {
+  const raw = env[name]?.trim();
+  if (!raw) return fallback;
+  if (!/^\d+$/.test(raw)) throw new Error(`${name}="${raw}" is not a whole number`);
+  return Number(raw);
+}
+
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   return {
     host: env.HOST ?? '0.0.0.0',
@@ -35,5 +48,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     quotaBytes: bytes(env, 'QUOTA_BYTES', 1 * GIB),
     maxObjectBytes: bytes(env, 'MAX_OBJECT_BYTES', 512 * MIB),
     skewMs: Number(env.SKEW_MS ?? 5 * 60 * 1000),
+    maxStorageIds: count(env, 'MAX_STORAGE_IDS', 0),
   };
 }

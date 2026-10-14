@@ -35,6 +35,10 @@ export interface Backend {
   stage(storageId: string, body: Readable, maxBytes: number): Promise<Staged>;
   delete(storageId: string, path: string): Promise<boolean>;
   deleteAll(storageId: string): Promise<void>;
+  /** Whether the storage-id holds anything (counts towards MAX_STORAGE_IDS). */
+  exists(storageId: string): Promise<boolean>;
+  /** Number of storage-ids that hold something. */
+  count(): Promise<number>;
 }
 
 export class TooLargeError extends Error {

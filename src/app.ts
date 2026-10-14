@@ -11,7 +11,8 @@
 //   DELETE /v1/o/<path>             remove one object (If-Match honoured)
 //   DELETE /v1/all                  remove everything of the storage-id
 //
-// Errors are JSON: {"error": "<code>", "message": "<text>"}.
+// Errors are JSON: {"error": "<code>", "message": "<text>"}. With
+// MAX_STORAGE_IDS set, a new storage-id on a full host gets 403 ids-limit.
 
 import { createHash } from 'node:crypto';
 import type { IncomingMessage, ServerResponse } from 'node:http';
@@ -124,6 +125,20 @@ export function createApp(opts: AppOptions): Handler {
     return r.pending;
   };
 
+  /**
+   * MAX_STORAGE_IDS: an id that already holds data is always admitted; a new
+   * one only while there is a free slot. Checked on every authenticated
+   * route so the app learns about a full host on its first `list`, not
+   * after a failed upload.
+   */
+  const admit = async (storageId: string) => {
+    if (!config.maxStorageIds) return;
+    if (await backend.exists(storageId)) return;
+    if ((await backend.count()) >= config.maxStorageIds) {
+      throw new HttpError(403, 'ids-limit', `this host accepts no new storage-ids (MAX_STORAGE_IDS=${config.maxStorageIds})`);
+    }
+  };
+
   /** Reads and hashes a body that is expected to be empty or small (JSON-less endpoints). */
   const finishNoBody = async (req: IncomingMessage, pending: AuthPending, method: string, path: string) => {
     const hash = createHash('sha256');
@@ -205,12 +220,14 @@ export function createApp(opts: AppOptions): Handler {
     if (url.pathname === '/v1/list' && method === 'GET') {
       const p = begin(req);
       await finishNoBody(req, p, method, signedPath);
+      await admit(p.storageId);
       json(res, 200, await backend.list(p.storageId));
       return;
     }
     if (url.pathname === '/v1/usage' && method === 'GET') {
       const p = begin(req);
       await finishNoBody(req, p, method, signedPath);
+      await admit(p.storageId);
       json(res, 200, { used: await backend.usage(p.storageId), quota: config.quotaBytes, maxObject: config.maxObjectBytes });
       return;
     }
@@ -230,6 +247,7 @@ export function createApp(opts: AppOptions): Handler {
 
       if (method === 'GET' || method === 'HEAD') {
         await finishNoBody(req, p, method, signedPath);
+        await admit(p.storageId);
         const info = await backend.stat(p.storageId, path);
         if (!info) throw new HttpError(404, 'not-found', 'no such object');
         if (stripQuotes(headerMap(req)['if-none-match']) === info.etag) {
@@ -248,6 +266,7 @@ export function createApp(opts: AppOptions): Handler {
 
       if (method === 'DELETE') {
         await finishNoBody(req, p, method, signedPath);
+        await admit(p.storageId);
         const info = await backend.stat(p.storageId, path);
         checkPreconditions(req, info?.etag);
         const removed = await backend.delete(p.storageId, path);
@@ -260,6 +279,10 @@ export function createApp(opts: AppOptions): Handler {
         if (Number.isFinite(declared) && declared > config.maxObjectBytes) {
           throw new HttpError(413, 'too-large', `object exceeds MAX_OBJECT_BYTES (${config.maxObjectBytes})`);
         }
+        // The signature covers the body hash and is verified after staging,
+        // so the slot check runs on the claimed id here: a full host answers
+        // before the body is read, a forged id still ends in 401.
+        await admit(p.storageId);
         const before = await backend.stat(p.storageId, path);
         checkPreconditions(req, before?.etag);
         const used = await backend.usage(p.storageId);

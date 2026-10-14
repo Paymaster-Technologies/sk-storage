@@ -20,7 +20,7 @@ let dataDir: string;
 beforeAll(async () => {
   dataDir = await mkdtemp(join(tmpdir(), 'sk-storage-'));
   const handler = createApp({
-    config: { host: '127.0.0.1', port: 0, dataDir, quotaBytes: 1000, maxObjectBytes: 600, skewMs: 300_000 },
+    config: { host: '127.0.0.1', port: 0, dataDir, quotaBytes: 1000, maxObjectBytes: 600, skewMs: 300_000, maxStorageIds: 0 },
     backend: new DiskBackend(dataDir),
   });
   server = createServer((req, res) => void handler(req, res));
@@ -40,9 +40,10 @@ async function call(
   body?: Uint8Array,
   extra: Record<string, string> = {},
   signOverride: Partial<{ method: string; path: string; body: Uint8Array }> = {},
+  origin: string = base,
 ): Promise<Response> {
   const headers = { ...signHeaders(k, { method, path, body, ...signOverride }), ...extra };
-  return fetch(base + path, { method, headers, body: body ? Buffer.from(body) : undefined });
+  return fetch(origin + path, { method, headers, body: body ? Buffer.from(body) : undefined });
 }
 
 const bytes = (s: string) => new TextEncoder().encode(s);
@@ -257,5 +258,55 @@ describe('storage server', () => {
     const r = await fetch(`${base}/v1/list`, { method: 'OPTIONS' });
     expect(r.status).toBe(204);
     expect(r.headers.get('access-control-allow-headers')).toContain('X-SK-Sig');
+  });
+});
+
+describe('MAX_STORAGE_IDS', () => {
+  const a = storageKeyFromSeed(new Uint8Array(64).fill(11));
+  const b = storageKeyFromSeed(new Uint8Array(64).fill(12));
+  const c = storageKeyFromSeed(new Uint8Array(64).fill(13));
+  let srv: Server;
+  let origin: string;
+  let dir: string;
+  const on = (k: StorageKey, method: string, path: string, body?: Uint8Array) => call(k, method, path, body, {}, {}, origin);
+
+  beforeAll(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'sk-storage-ids-'));
+    const handler = createApp({
+      config: { host: '127.0.0.1', port: 0, dataDir: dir, quotaBytes: 1000, maxObjectBytes: 600, skewMs: 300_000, maxStorageIds: 1 },
+      backend: new DiskBackend(dir),
+    });
+    srv = createServer((req, res) => void handler(req, res));
+    await new Promise<void>((r) => srv.listen(0, '127.0.0.1', r));
+    origin = `http://127.0.0.1:${(srv.address() as AddressInfo).port}`;
+  });
+
+  afterAll(async () => {
+    await new Promise<void>((r) => srv.close(() => r()));
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it('admits ids with data, refuses new ones once the slots are taken, frees a slot on DELETE /v1/all', async () => {
+    // Nothing stored yet: anyone may look.
+    expect((await on(a, 'GET', '/v1/list')).status).toBe(200);
+    expect((await on(a, 'PUT', objectUrlPath('meta.sk1e'), bytes('a'))).status).toBe(201);
+    // The only slot is taken: the second seed is refused on its first list, usage and upload.
+    const refused = await on(b, 'GET', '/v1/list');
+    expect(refused.status).toBe(403);
+    expect(await refused.json()).toMatchObject({ error: 'ids-limit' });
+    expect((await on(b, 'GET', '/v1/usage')).status).toBe(403);
+    expect((await on(b, 'PUT', objectUrlPath('meta.sk1e'), bytes('b'))).status).toBe(403);
+    // The admitted seed keeps working.
+    expect((await on(a, 'GET', '/v1/list')).status).toBe(200);
+    // Wiping frees the slot.
+    expect((await on(a, 'DELETE', '/v1/all')).status).toBe(200);
+    expect((await on(b, 'GET', '/v1/list')).status).toBe(200);
+    // An upload that never commits does not take the slot...
+    expect((await on(b, 'PUT', objectUrlPath('big.skf'), new Uint8Array(601))).status).toBe(413);
+    expect(await readdir(dir)).toEqual([]);
+    expect((await on(c, 'GET', '/v1/list')).status).toBe(200);
+    // ...a committed one does.
+    expect((await on(b, 'PUT', objectUrlPath('meta.sk1e'), bytes('b'))).status).toBe(201);
+    expect((await on(c, 'GET', '/v1/list')).status).toBe(403);
   });
 });

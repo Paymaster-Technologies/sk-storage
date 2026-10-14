@@ -55,6 +55,9 @@ export class DiskBackend implements Backend {
   }
 
   async stage(sid: string, body: Readable, maxBytes: number): Promise<Staged> {
+    // A first upload creates the storage-id's directory; if it never
+    // commits, the directory goes too so the id does not count as taken.
+    const fresh = !(await this.exists(sid));
     const tmpDir = join(this.sidDir(sid), 'tmp');
     await mkdir(tmpDir, { recursive: true });
     const tmp = join(tmpDir, randomBytes(12).toString('hex'));
@@ -71,10 +74,12 @@ export class DiskBackend implements Backend {
         cb(null, chunk);
       },
     });
+    const dropFresh = () => (fresh ? this.locked(sid, () => this.removeIfUncommitted(sid)) : Promise.resolve());
     try {
       await pipeline(body, meter, createWriteStream(tmp));
     } catch (e) {
       await rm(tmp, { force: true });
+      await dropFresh();
       throw e;
     }
     const etag = hash.digest('hex');
@@ -99,8 +104,25 @@ export class DiskBackend implements Backend {
         if (done) return;
         done = true;
         await rm(tmp, { force: true });
+        await dropFresh();
       },
     };
+  }
+
+  async exists(sid: string): Promise<boolean> {
+    try {
+      return (await stat(this.sidDir(sid))).isDirectory();
+    } catch {
+      return false;
+    }
+  }
+
+  async count(): Promise<number> {
+    try {
+      return (await readdir(this.root, { withFileTypes: true })).filter((e) => e.isDirectory()).length;
+    } catch {
+      return 0;
+    }
   }
 
   async delete(sid: string, path: string): Promise<boolean> {
@@ -126,6 +148,24 @@ export class DiskBackend implements Backend {
 
   private sidDir(sid: string): string {
     return join(this.root, sid);
+  }
+
+  /** Removes the storage-id's directory when no object was ever committed into it. */
+  private async removeIfUncommitted(sid: string): Promise<void> {
+    try {
+      await stat(join(this.sidDir(sid), 'index.json'));
+      return;
+    } catch {
+      // no index: nothing committed
+    }
+    try {
+      // Another upload of the same id may still be streaming into tmp/.
+      if ((await readdir(join(this.sidDir(sid), 'tmp'))).length) return;
+    } catch {
+      // no tmp dir
+    }
+    this.indexes.delete(sid);
+    await rm(this.sidDir(sid), { recursive: true, force: true });
   }
 
   private objectFile(sid: string, path: string): string {

@@ -104,8 +104,9 @@ forged body never leaves a half-written or unauthenticated object.
 ### Not in this version
 
 Per-account manifest signed by the client (rollback protection), tombstones
-and multi-device merge. The pilot's client treats the server as a mirror of
-one device's archive directory.
+and merging of same-named files from several devices. The pilot's client only
+adds and replaces objects and never deletes remote-only ones: one seed lives
+on several devices, so the account is the union of their archives.
 
 ## Try it with curl
 

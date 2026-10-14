@@ -46,7 +46,7 @@ interface Strings {
   /** Bullets of the user card. `{path}` is [settingsPath], `{addr}` the address pill with its copy button. */
   userSteps: string[];
   dev: string;
-  /** Link text for `{repo}` in [devSteps]. */
+  /** Link text for `{repo}` in [devSteps] (the word GitHub). */
   devRepo: string;
   /** Bullets of the self-hosting card. `{repo}` is the GitHub link. */
   devSteps: string[];
@@ -77,9 +77,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Devices on the same seed phrase sync through it on their own.',
     ],
     dev: 'Want to keep your copy on your own server?',
-    devRepo: 'Source code on GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'This is a single Node process with a small signed HTTP API (SKS1). {repo}.',
+      'This is a single Node process with a small signed HTTP API (SKS1).',
+      'Source code on {repo}.',
       'Run it on your host and put its address in the same settings screen.',
     ],
     copy: 'Copy',
@@ -105,9 +106,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Устройства с одной seed-фразой синхронизируются через него сами.',
     ],
     dev: 'Хотите хранить копию на своём сервере?',
-    devRepo: 'Исходный код на GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'Это один процесс Node с небольшим подписанным HTTP API (SKS1). {repo}.',
+      'Это один процесс Node с небольшим подписанным HTTP API (SKS1).',
+      'Исходный код на {repo}.',
       'Поднимите его у себя и укажите в том же экране настроек свой адрес.',
     ],
     copy: 'Копировать',
@@ -133,9 +135,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Los dispositivos con la misma frase semilla se sincronizan a través de él por sí solos.',
     ],
     dev: '¿Quiere guardar su copia en su propio servidor?',
-    devRepo: 'Código fuente en GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1). {repo}.',
+      'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1).',
+      'Código fuente en {repo}.',
       'Ejecútelo en su host e indique su dirección en la misma pantalla de ajustes.',
     ],
     copy: 'Copiar',
@@ -161,9 +164,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Os dispositivos com a mesma frase semente sincronizam-se através dele sozinhos.',
     ],
     dev: 'Quer guardar a sua cópia no seu próprio servidor?',
-    devRepo: 'Código-fonte no GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'É um único processo Node com uma pequena API HTTP assinada (SKS1). {repo}.',
+      'É um único processo Node com uma pequena API HTTP assinada (SKS1).',
+      'Código-fonte no {repo}.',
       'Execute-o no seu host e indique o seu endereço no mesmo ecrã de definições.',
     ],
     copy: 'Copiar',
@@ -189,9 +193,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Les appareils partageant la même phrase de récupération se synchronisent via lui d\'eux-mêmes.',
     ],
     dev: 'Vous voulez garder votre copie sur votre propre serveur ?',
-    devRepo: 'Code source sur GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'C\'est un seul processus Node avec une petite API HTTP signée (SKS1). {repo}.',
+      'C\'est un seul processus Node avec une petite API HTTP signée (SKS1).',
+      'Code source sur {repo}.',
       'Lancez-le chez vous et saisissez son adresse dans le même écran de réglages.',
     ],
     copy: 'Copier',
@@ -217,9 +222,10 @@ const STRINGS: Record<Lang, Strings> = {
       'Aynı tohum ifadesine sahip cihazlar onun üzerinden kendiliğinden eşitlenir.',
     ],
     dev: 'Kopyanızı kendi sunucunuzda tutmak ister misiniz?',
-    devRepo: 'GitHub\'daki kaynak kodu',
+    devRepo: 'GitHub',
     devSteps: [
-      'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir. {repo}.',
+      'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir.',
+      '{repo}\'daki kaynak kodu.',
       'Kendi sunucunuzda çalıştırın ve adresini aynı ayar ekranına girin.',
     ],
     copy: 'Kopyala',
@@ -245,9 +251,10 @@ const STRINGS: Record<Lang, Strings> = {
       'الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبره تلقائيًا.',
     ],
     dev: 'هل تريد حفظ نسختك على خادمك الخاص؟',
-    devRepo: 'الشفرة المصدرية على GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1). {repo}.',
+      'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1).',
+      'الشفرة المصدرية على {repo}.',
       'شغّلها لديك وأدخل عنوانها في شاشة الإعدادات نفسها.',
     ],
     copy: 'نسخ',
@@ -273,9 +280,10 @@ const STRINGS: Record<Lang, Strings> = {
       'دستگاه‌هایی با یک عبارت بازیابی از طریق آن خودبه‌خود همگام می‌شوند.',
     ],
     dev: 'می‌خواهید نسخه‌تان را روی سرور خودتان نگه دارید؟',
-    devRepo: 'کد منبع در GitHub',
+    devRepo: 'GitHub',
     devSteps: [
-      'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است. {repo}.',
+      'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است.',
+      'کد منبع در {repo}.',
       'آن را روی میزبان خود اجرا کنید و نشانی‌اش را در همان صفحه تنظیمات وارد کنید.',
     ],
     copy: 'کپی',
@@ -301,9 +309,10 @@ const STRINGS: Record<Lang, Strings> = {
       'একই সিড ফ্রেজের ডিভাইসগুলো এর মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
     ],
     dev: 'আপনার কপি নিজের সার্ভারে রাখতে চান?',
-    devRepo: 'GitHub-এ সোর্স কোড',
+    devRepo: 'GitHub',
     devSteps: [
-      'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস। {repo}।',
+      'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস।',
+      '{repo}-এ সোর্স কোড।',
       'নিজের হোস্টে চালান এবং এর ঠিকানা একই সেটিংস স্ক্রিনে দিন।',
     ],
     copy: 'কপি করুন',
@@ -354,14 +363,14 @@ const COPY_SVG =
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
 
 // Inline pieces the card bullets embed via `{path}` / `{addr}` / `{repo}`;
-// the address pill and the repo link start their own line.
+// the address pill starts its own line.
 // One set of templates for the server render and the client's language
 // switch (shipped in the i18n JSON); `{text}` and `{copy}` are filled with
 // escaped strings by [fill].
 const SLOTS = {
   path: '<span class="pill">{text}</span>',
   addr: `<br><span class="addr"><code id="addr">{text}</code><button id="copy" class="icon-btn small" title="{copy}" aria-label="{copy}">${COPY_SVG}</button></span>`,
-  repo: `<br><a href="${REPO}" target="_blank" rel="noopener">{text}</a>`,
+  repo: `<a href="${REPO}" target="_blank" rel="noopener">{text}</a>`,
 };
 const fill = (tpl: string, vars: Record<string, string>) =>
   tpl.replace(/\{(\w+)\}/g, (m, k: string) => (Object.hasOwn(vars, k) ? vars[k]! : m));

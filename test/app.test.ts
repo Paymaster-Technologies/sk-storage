@@ -62,15 +62,29 @@ describe('storage server', () => {
     expect(en.headers.get('vary')).toBe('Accept-Language');
     expect(en.headers.get('cache-control')).toBe('public, max-age=3600');
     const html = await en.text();
-    expect(html).toContain('<html lang="en">');
+    expect(html).toContain('<html lang="en" dir="ltr">');
     expect(html).toContain('Secret Keeper storage');
     expect(html).toContain('https://secretkeeper.net/protocol');
 
     const ru = await fetch(`${base}/`, { headers: { 'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.5' } });
     expect(ru.headers.get('content-language')).toBe('ru');
     const ruHtml = await ru.text();
-    expect(ruHtml).toContain('<html lang="ru">');
+    expect(ruHtml).toContain('<html lang="ru" dir="ltr">');
     expect(ruHtml).toContain('https://secretkeeper.net/ru/protocol');
+
+    // Every site language is rendered; RTL ones get dir="rtl"; unknown ones fall back to English.
+    const fa = await fetch(`${base}/`, { headers: { 'Accept-Language': 'fa' } });
+    expect(await fa.text()).toContain('<html lang="fa" dir="rtl">');
+    const bn = await fetch(`${base}/`, { headers: { 'Accept-Language': 'de;q=0.9, bn;q=0.8' } });
+    expect(await bn.text()).toContain('<html lang="bn" dir="ltr">');
+    const de = await fetch(`${base}/`, { headers: { 'Accept-Language': 'de' } });
+    expect(de.headers.get('content-language')).toBe('en');
+    // Controls and hotkeys of the site are present.
+    expect(html).toContain('id="theme-toggle"');
+    expect(html).toContain('id="lang-dd"');
+    expect(html).toContain("e.code==='KeyZ'");
+    expect(html).toContain("e.code==='KeyL'");
+    expect(html).toContain('href="/icon-128.png"');
 
     const head = await fetch(`${base}/`, { method: 'HEAD' });
     expect(head.status).toBe(200);
@@ -88,6 +102,14 @@ describe('storage server', () => {
     const body = await sec.text();
     expect(body).toContain('Contact: mailto:support@secretkeeper.net');
     expect(body).toMatch(/^Expires: \d{4}-\d{2}-\d{2}T/m);
+
+    for (const p of ['/favicon.ico', '/icon-32.png', '/icon-128.png']) {
+      const icon = await fetch(`${base}${p}`);
+      expect(icon.status).toBe(200);
+      expect(icon.headers.get('content-type')).toBe('image/png');
+      const bytes = new Uint8Array(await icon.arrayBuffer());
+      expect([...bytes.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
+    }
 
     const other = await fetch(`${base}/index.html`);
     expect(other.status).toBe(404);

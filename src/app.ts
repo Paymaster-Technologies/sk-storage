@@ -1,7 +1,7 @@
 // HTTP layer: routes, authentication, quotas. No framework, node:http only.
 //
 //   GET    /                        landing page for humans (HTML, en/ru by Accept-Language)
-//   GET    /robots.txt, /.well-known/security.txt
+//   GET    /robots.txt, /.well-known/security.txt, /favicon.ico, /icon-32.png, /icon-128.png
 //   GET    /healthz                 liveness, unauthenticated
 //   GET    /v1/list                 [{path,size,etag,mtime}]
 //   GET    /v1/usage                {used, quota, maxObject}
@@ -19,6 +19,7 @@ import { pipeline } from 'node:stream/promises';
 
 import { type AuthFailure, type AuthPending, Authenticator, EMPTY_BODY_SHA256 } from './auth.js';
 import type { Config } from './config.js';
+import { ICON_128_PNG, ICON_32_PNG } from './icons.js';
 import { landingHtml, pickLanguage, ROBOTS_TXT, securityTxt } from './landing.js';
 import { parseObjectPath } from './paths.js';
 import { type Backend, TooLargeError } from './store/backend.js';
@@ -80,7 +81,7 @@ export function createApp(opts: AppOptions): Handler {
   };
   const fail = (res: ServerResponse, e: HttpError) => json(res, e.status, { error: e.code, message: e.message });
   // Static, cacheable documents (landing page, robots.txt, security.txt).
-  const text = (res: ServerResponse, method: string, body: string, contentType: string, extra: Record<string, string> = {}) => {
+  const text = (res: ServerResponse, method: string, body: string | Buffer, contentType: string, extra: Record<string, string> = {}) => {
     res.writeHead(200, {
       'Content-Type': contentType,
       'Content-Length': Buffer.byteLength(body),
@@ -90,6 +91,11 @@ export function createApp(opts: AppOptions): Handler {
       ...extra,
     });
     res.end(method === 'HEAD' ? undefined : body);
+  };
+  const ICONS: Record<string, Buffer> = {
+    '/favicon.ico': ICON_32_PNG,
+    '/icon-32.png': ICON_32_PNG,
+    '/icon-128.png': ICON_128_PNG,
   };
   const authFail = (reason: AuthFailure) => new HttpError(401, `auth-${reason}`, AUTH_STATUS[reason]);
 
@@ -166,6 +172,11 @@ export function createApp(opts: AppOptions): Handler {
       if (url.pathname === '/') {
         const lang = pickLanguage(req.headers['accept-language']);
         text(res, method, landingHtml(lang), 'text/html; charset=utf-8', { Vary: 'Accept-Language', 'Content-Language': lang });
+        return;
+      }
+      const icon = ICONS[url.pathname];
+      if (icon) {
+        text(res, method, icon, 'image/png', { 'Cache-Control': 'public, max-age=86400' });
         return;
       }
       if (url.pathname === '/robots.txt') {

@@ -353,14 +353,15 @@ const CLOUD_LOGO = `<svg class="cloud" viewBox="0 0 200 140" width="200" height=
 const COPY_SVG =
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
 
-// Inline pieces the card bullets embed via `{path}` / `{addr}` / `{repo}`.
+// Inline pieces the card bullets embed via `{path}` / `{addr}` / `{repo}`;
+// the address pill and the repo link start their own line.
 // One set of templates for the server render and the client's language
 // switch (shipped in the i18n JSON); `{text}` and `{copy}` are filled with
 // escaped strings by [fill].
 const SLOTS = {
   path: '<span class="pill">{text}</span>',
-  addr: `<span class="addr"><code id="addr">{text}</code><button id="copy" class="icon-btn small" title="{copy}" aria-label="{copy}">${COPY_SVG}</button></span>`,
-  repo: `<a href="${REPO}" target="_blank" rel="noopener">{text}</a>`,
+  addr: `<br><span class="addr"><code id="addr">{text}</code><button id="copy" class="icon-btn small" title="{copy}" aria-label="{copy}">${COPY_SVG}</button></span>`,
+  repo: `<br><a href="${REPO}" target="_blank" rel="noopener">{text}</a>`,
 };
 const fill = (tpl: string, vars: Record<string, string>) =>
   tpl.replace(/\{(\w+)\}/g, (m, k: string) => (Object.hasOwn(vars, k) ? vars[k]! : m));
@@ -403,7 +404,7 @@ p{margin:0 0 16px}
 .card h2{font-size:16px;margin:0 0 6px}
 .pill,.addr{display:inline-block;border-radius:999px;background:color-mix(in srgb,var(--text) 10%,transparent);color:var(--text);padding:0 8px;line-height:1.6}
 .pill{white-space:nowrap}
-.addr{display:inline-flex;align-items:center;gap:2px;max-width:100%;padding:0 2px 0 10px;vertical-align:middle}
+.addr{display:inline-flex;align-items:center;gap:2px;max-width:100%;padding:0 2px 0 10px;vertical-align:middle;margin-top:4px}
 .addr code{font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--text);overflow-wrap:anywhere;direction:ltr;text-align:start;cursor:text}
 .icon-btn.small{width:26px;height:26px;border-radius:13px;color:var(--secondary)}
 .icon-btn.small:hover{color:var(--text)}

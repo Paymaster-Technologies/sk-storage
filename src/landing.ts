@@ -16,6 +16,7 @@
 
 const SITE = 'https://secretkeeper.net';
 const SUPPORT = 'support@secretkeeper.net';
+const REPO = 'https://github.com/Paymaster-Technologies/sk-storage';
 
 export type Lang = 'en' | 'ru' | 'es' | 'pt' | 'fr' | 'tr' | 'ar' | 'fa' | 'bn';
 
@@ -35,6 +36,8 @@ export const LANGS: { code: Lang; label: string; dir?: 'rtl' }[] = [
 interface Strings {
   title: string;
   lead: string;
+  /** Heading of the explainer card. */
+  how: string;
   what: string;
   user: string;
   /** Before the server address. */
@@ -42,7 +45,12 @@ interface Strings {
   /** After the server address. */
   userNote: string;
   dev: string;
+  /** First sentence of the self-hosting card, then the repo link, then [devRun]. */
   devHint: string;
+  devRepo: string;
+  /** Sentence terminator after the repo link ('.' or the Bengali danda). */
+  devStop: string;
+  devRun: string;
   copy: string;
   copied: string;
   protocol: string;
@@ -58,6 +66,7 @@ const STRINGS: Record<Lang, Strings> = {
   en: {
     title: 'Secret Keeper storage',
     lead: 'This host keeps cloud copies of Secret Keeper profiles.',
+    how: 'How it works',
     what:
       'Every object here is encrypted on the device before it leaves it. The server stores ciphertext, ' +
       'authenticates requests by an Ed25519 signature and takes no part in the cryptography: it cannot ' +
@@ -65,8 +74,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: 'Want to keep your copy here?',
     userHint: 'In the app open Settings → Cloud copy and paste this server address:',
     userNote: 'Devices on the same seed phrase sync through it on their own.',
-    dev: 'Prefer your own server?',
-    devHint: 'This is a single Node process with a small signed HTTP API (SKS1). Run it on your host and put its address in the same settings screen.',
+    dev: 'Want to keep your copy on your own server?',
+    devHint: 'This is a single Node process with a small signed HTTP API (SKS1).',
+    devRepo: 'Source code on GitHub',
+    devStop: '.',
+    devRun: 'Run it on your host and put its address in the same settings screen.',
     copy: 'Copy',
     copied: 'Copied',
     protocol: 'Protocol',
@@ -78,6 +90,7 @@ const STRINGS: Record<Lang, Strings> = {
   ru: {
     title: 'Хранилище Secret Keeper',
     lead: 'Здесь живут облачные копии профилей Secret Keeper.',
+    how: 'Как это работает',
     what:
       'Каждый объект шифруется на устройстве до того, как его покинет. Сервер хранит шифртекст, ' +
       'проверяет подпись Ed25519 на запросах и в криптографии не участвует: прочитать, слить или ' +
@@ -85,8 +98,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: 'Хотите хранить копию здесь?',
     userHint: 'В приложении откройте Настройки → Облачная копия и вставьте адрес этого сервера:',
     userNote: 'Устройства с одной seed-фразой синхронизируются через него сами.',
-    dev: 'Хотите свой сервер?',
-    devHint: 'Это один процесс Node с небольшим подписанным HTTP API (SKS1). Поднимите его у себя и укажите в том же экране настроек свой адрес.',
+    dev: 'Хотите хранить копию на своём сервере?',
+    devHint: 'Это один процесс Node с небольшим подписанным HTTP API (SKS1).',
+    devRepo: 'Исходный код на GitHub',
+    devStop: '.',
+    devRun: 'Поднимите его у себя и укажите в том же экране настроек свой адрес.',
     copy: 'Копировать',
     copied: 'Скопировано',
     protocol: 'Протокол',
@@ -98,6 +114,7 @@ const STRINGS: Record<Lang, Strings> = {
   es: {
     title: 'Almacenamiento de Secret Keeper',
     lead: 'Aquí viven las copias en la nube de los perfiles de Secret Keeper.',
+    how: 'Cómo funciona',
     what:
       'Cada objeto se cifra en el dispositivo antes de salir de él. El servidor guarda texto cifrado, ' +
       'autentica las solicitudes con una firma Ed25519 y no participa en la criptografía: no puede leer, ' +
@@ -105,8 +122,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: '¿Quiere guardar su copia aquí?',
     userHint: 'En la aplicación abra Ajustes → Copia en la nube y pegue la dirección de este servidor:',
     userNote: 'Los dispositivos con la misma frase semilla se sincronizan a través de él por sí solos.',
-    dev: '¿Prefiere su propio servidor?',
-    devHint: 'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1). Ejecútelo en su host e indique su dirección en la misma pantalla de ajustes.',
+    dev: '¿Quiere guardar su copia en su propio servidor?',
+    devHint: 'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1).',
+    devRepo: 'Código fuente en GitHub',
+    devStop: '.',
+    devRun: 'Ejecútelo en su host e indique su dirección en la misma pantalla de ajustes.',
     copy: 'Copiar',
     copied: 'Copiado',
     protocol: 'Protocolo',
@@ -118,6 +138,7 @@ const STRINGS: Record<Lang, Strings> = {
   pt: {
     title: 'Armazenamento do Secret Keeper',
     lead: 'Aqui ficam as cópias na nuvem dos perfis do Secret Keeper.',
+    how: 'Como funciona',
     what:
       'Cada objeto é cifrado no dispositivo antes de sair dele. O servidor guarda texto cifrado, ' +
       'autentica os pedidos por assinatura Ed25519 e não participa na criptografia: não consegue ler, ' +
@@ -125,8 +146,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: 'Quer guardar a sua cópia aqui?',
     userHint: 'Na aplicação abra Definições → Cópia na nuvem e cole o endereço deste servidor:',
     userNote: 'Os dispositivos com a mesma frase semente sincronizam-se através dele sozinhos.',
-    dev: 'Prefere o seu próprio servidor?',
-    devHint: 'É um único processo Node com uma pequena API HTTP assinada (SKS1). Execute-o no seu host e indique o seu endereço no mesmo ecrã de definições.',
+    dev: 'Quer guardar a sua cópia no seu próprio servidor?',
+    devHint: 'É um único processo Node com uma pequena API HTTP assinada (SKS1).',
+    devRepo: 'Código-fonte no GitHub',
+    devStop: '.',
+    devRun: 'Execute-o no seu host e indique o seu endereço no mesmo ecrã de definições.',
     copy: 'Copiar',
     copied: 'Copiado',
     protocol: 'Protocolo',
@@ -138,6 +162,7 @@ const STRINGS: Record<Lang, Strings> = {
   fr: {
     title: 'Stockage Secret Keeper',
     lead: 'Ici vivent les copies cloud des profils Secret Keeper.',
+    how: 'Comment ça marche',
     what:
       "Chaque objet est chiffré sur l'appareil avant de le quitter. Le serveur stocke du texte chiffré, " +
       'authentifie les requêtes par une signature Ed25519 et ne participe pas à la cryptographie : il ne peut ' +
@@ -145,8 +170,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: 'Vous voulez garder votre copie ici ?',
     userHint: "Dans l'application, ouvrez Réglages → Copie cloud et collez l'adresse de ce serveur :",
     userNote: "Les appareils partageant la même phrase de récupération se synchronisent via lui d'eux-mêmes.",
-    dev: 'Vous préférez votre propre serveur ?',
-    devHint: "C'est un seul processus Node avec une petite API HTTP signée (SKS1). Lancez-le chez vous et saisissez son adresse dans le même écran de réglages.",
+    dev: 'Vous voulez garder votre copie sur votre propre serveur ?',
+    devHint: "C'est un seul processus Node avec une petite API HTTP signée (SKS1).",
+    devRepo: 'Code source sur GitHub',
+    devStop: '.',
+    devRun: 'Lancez-le chez vous et saisissez son adresse dans le même écran de réglages.',
     copy: 'Copier',
     copied: 'Copié',
     protocol: 'Protocole',
@@ -158,6 +186,7 @@ const STRINGS: Record<Lang, Strings> = {
   tr: {
     title: 'Secret Keeper depolama',
     lead: 'Secret Keeper profillerinin bulut kopyaları burada yaşar.',
+    how: 'Nasıl çalışır',
     what:
       'Her nesne cihazdan ayrılmadan önce cihazda şifrelenir. Sunucu şifreli metni saklar, istekleri ' +
       'Ed25519 imzasıyla doğrular ve kriptografiye katılmaz: hiçbir şeyi okuyamaz, birleştiremez veya geri ' +
@@ -165,8 +194,11 @@ const STRINGS: Record<Lang, Strings> = {
     user: 'Kopyanızı burada tutmak ister misiniz?',
     userHint: 'Uygulamada Ayarlar → Bulut kopyası bölümünü açın ve bu sunucunun adresini yapıştırın:',
     userNote: 'Aynı tohum ifadesine sahip cihazlar onun üzerinden kendiliğinden eşitlenir.',
-    dev: 'Kendi sunucunuzu mu tercih edersiniz?',
-    devHint: 'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir. Kendi sunucunuzda çalıştırın ve adresini aynı ayar ekranına girin.',
+    dev: 'Kopyanızı kendi sunucunuzda tutmak ister misiniz?',
+    devHint: 'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir.',
+    devRepo: "GitHub'daki kaynak kodu",
+    devStop: '.',
+    devRun: 'Kendi sunucunuzda çalıştırın ve adresini aynı ayar ekranına girin.',
     copy: 'Kopyala',
     copied: 'Kopyalandı',
     protocol: 'Protokol',
@@ -178,14 +210,18 @@ const STRINGS: Record<Lang, Strings> = {
   ar: {
     title: 'تخزين Secret Keeper',
     lead: 'هنا تُحفظ النسخ السحابية لملفات Secret Keeper الشخصية.',
+    how: 'كيف يعمل',
     what:
       'يُشفَّر كل كائن على الجهاز قبل أن يغادره. يخزّن الخادم النص المشفّر، ويتحقق من الطلبات بتوقيع Ed25519، ' +
       'ولا يشارك في التشفير: لا يمكنه قراءة أي شيء أو دمجه أو استعادته. لا يوجد في هذه الصفحة ما يمكن مشاهدته أو تسجيل الدخول إليه.',
     user: 'هل تريد حفظ نسختك هنا؟',
     userHint: 'في التطبيق افتح الإعدادات ← النسخة السحابية والصق عنوان هذا الخادم:',
     userNote: 'الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبره تلقائيًا.',
-    dev: 'تفضّل خادمك الخاص؟',
-    devHint: 'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1). شغّلها لديك وأدخل عنوانها في شاشة الإعدادات نفسها.',
+    dev: 'هل تريد حفظ نسختك على خادمك الخاص؟',
+    devHint: 'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1).',
+    devRepo: 'الشفرة المصدرية على GitHub',
+    devStop: '.',
+    devRun: 'شغّلها لديك وأدخل عنوانها في شاشة الإعدادات نفسها.',
     copy: 'نسخ',
     copied: 'تم النسخ',
     protocol: 'البروتوكول',
@@ -197,14 +233,18 @@ const STRINGS: Record<Lang, Strings> = {
   fa: {
     title: 'فضای ذخیره‌سازی Secret Keeper',
     lead: 'نسخه‌های ابری پروفایل‌های Secret Keeper اینجا نگهداری می‌شوند.',
+    how: 'چطور کار می‌کند',
     what:
       'هر شیء پیش از خروج از دستگاه روی همان دستگاه رمزگذاری می‌شود. سرور متن رمزشده را نگه می‌دارد، درخواست‌ها را با ' +
       'امضای Ed25519 احراز می‌کند و در رمزنگاری نقشی ندارد: نمی‌تواند چیزی را بخواند، ادغام کند یا بازیابی کند. در این صفحه چیزی برای دیدن یا ورود وجود ندارد.',
     user: 'می‌خواهید نسخه‌تان را اینجا نگه دارید؟',
     userHint: 'در برنامه تنظیمات ← نسخه ابری را باز کنید و نشانی این سرور را بچسبانید:',
     userNote: 'دستگاه‌هایی با یک عبارت بازیابی از طریق آن خودبه‌خود همگام می‌شوند.',
-    dev: 'سرور خودتان را ترجیح می‌دهید؟',
-    devHint: 'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است. آن را روی میزبان خود اجرا کنید و نشانی‌اش را در همان صفحه تنظیمات وارد کنید.',
+    dev: 'می‌خواهید نسخه‌تان را روی سرور خودتان نگه دارید؟',
+    devHint: 'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است.',
+    devRepo: 'کد منبع در GitHub',
+    devStop: '.',
+    devRun: 'آن را روی میزبان خود اجرا کنید و نشانی‌اش را در همان صفحه تنظیمات وارد کنید.',
     copy: 'کپی',
     copied: 'کپی شد',
     protocol: 'پروتکل',
@@ -216,14 +256,18 @@ const STRINGS: Record<Lang, Strings> = {
   bn: {
     title: 'Secret Keeper স্টোরেজ',
     lead: 'Secret Keeper প্রোফাইলের ক্লাউড কপি এখানে থাকে।',
+    how: 'এটি কীভাবে কাজ করে',
     what:
       'প্রতিটি অবজেক্ট ডিভাইস ছাড়ার আগে ডিভাইসেই এনক্রিপ্ট হয়। সার্ভার শুধু সাইফারটেক্সট রাখে, Ed25519 স্বাক্ষর দিয়ে অনুরোধ ' +
       'যাচাই করে এবং ক্রিপ্টোগ্রাফিতে অংশ নেয় না: কিছু পড়তে, মেলাতে বা পুনরুদ্ধার করতে পারে না। এই পৃষ্ঠায় দেখার বা লগ ইন করার কিছু নেই।',
     user: 'আপনার কপি এখানে রাখতে চান?',
     userHint: 'অ্যাপে সেটিংস → ক্লাউড কপি খুলুন এবং এই সার্ভারের ঠিকানা পেস্ট করুন:',
     userNote: 'একই সিড ফ্রেজের ডিভাইসগুলো এর মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
-    dev: 'নিজের সার্ভার চান?',
-    devHint: 'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস। নিজের হোস্টে চালান এবং এর ঠিকানা একই সেটিংস স্ক্রিনে দিন।',
+    dev: 'আপনার কপি নিজের সার্ভারে রাখতে চান?',
+    devHint: 'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস।',
+    devRepo: 'GitHub-এ সোর্স কোড',
+    devStop: '।',
+    devRun: 'নিজের হোস্টে চালান এবং এর ঠিকানা একই সেটিংস স্ক্রিনে দিন।',
     copy: 'কপি করুন',
     copied: 'কপি হয়েছে',
     protocol: 'প্রোটোকল',
@@ -338,15 +382,15 @@ footer .spacer{flex:1}
 ${CLOUD_LOGO}
 <h1 data-i18n="title">${escape(t.title)}</h1>
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
-<p data-i18n="what">${escape(t.what)}</p>
 <div class="cards">
+<section class="card"><h2 data-i18n="how">${escape(t.how)}</h2><p data-i18n="what">${escape(t.what)}</p></section>
 <section class="card">
 <h2 data-i18n="user">${escape(t.user)}</h2>
 <p data-i18n="userHint">${escape(t.userHint)}</p>
 <div class="addr"><code id="addr">${escape(origin)}</code><button id="copy" class="icon-btn small" title="${escape(t.copy)}" aria-label="${escape(t.copy)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
 <p data-i18n="userNote">${escape(t.userNote)}</p>
 </section>
-<section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2><p data-i18n="devHint">${escape(t.devHint)}</p></section>
+<section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2><p><span data-i18n="devHint">${escape(t.devHint)}</span> <a href="${REPO}" data-i18n="devRepo">${escape(t.devRepo)}</a><span data-i18n="devStop">${t.devStop}</span> <span data-i18n="devRun">${escape(t.devRun)}</span></p></section>
 </div>
 <footer>
 <div class="row">

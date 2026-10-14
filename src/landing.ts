@@ -80,7 +80,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'This is a single Node process with a small signed HTTP API (SKS1).',
-      'Source code on {repo}.',
+      'Get the source code on {repo}.',
       'Run it on your host and put its address in the same settings screen.',
     ],
     copy: 'Copy',
@@ -109,7 +109,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'Это один процесс Node с небольшим подписанным HTTP API (SKS1).',
-      'Исходный код на {repo}.',
+      'Возьмите исходный код на {repo}.',
       'Поднимите его у себя и укажите в том же экране настроек свой адрес.',
     ],
     copy: 'Копировать',
@@ -138,7 +138,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'Es un único proceso de Node con una pequeña API HTTP firmada (SKS1).',
-      'Código fuente en {repo}.',
+      'Tome el código fuente en {repo}.',
       'Ejecútelo en su host e indique su dirección en la misma pantalla de ajustes.',
     ],
     copy: 'Copiar',
@@ -167,7 +167,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'É um único processo Node com uma pequena API HTTP assinada (SKS1).',
-      'Código-fonte no {repo}.',
+      'Obtenha o código-fonte no {repo}.',
       'Execute-o no seu host e indique o seu endereço no mesmo ecrã de definições.',
     ],
     copy: 'Copiar',
@@ -196,7 +196,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'C\'est un seul processus Node avec une petite API HTTP signée (SKS1).',
-      'Code source sur {repo}.',
+      'Récupérez le code source sur {repo}.',
       'Lancez-le chez vous et saisissez son adresse dans le même écran de réglages.',
     ],
     copy: 'Copier',
@@ -225,7 +225,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'Bu, küçük bir imzalı HTTP API (SKS1) içeren tek bir Node sürecidir.',
-      '{repo}\'daki kaynak kodu.',
+      'Kaynak kodunu {repo}\'dan alın.',
       'Kendi sunucunuzda çalıştırın ve adresini aynı ayar ekranına girin.',
     ],
     copy: 'Kopyala',
@@ -254,7 +254,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'هذه عملية Node واحدة مع واجهة HTTP موقّعة صغيرة (SKS1).',
-      'الشفرة المصدرية على {repo}.',
+      'خذ الشفرة المصدرية من {repo}.',
       'شغّلها لديك وأدخل عنوانها في شاشة الإعدادات نفسها.',
     ],
     copy: 'نسخ',
@@ -283,7 +283,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'این یک فرایند Node با یک API کوچک HTTP امضاشده (SKS1) است.',
-      'کد منبع در {repo}.',
+      'کد منبع را از {repo} بگیرید.',
       'آن را روی میزبان خود اجرا کنید و نشانی‌اش را در همان صفحه تنظیمات وارد کنید.',
     ],
     copy: 'کپی',
@@ -312,7 +312,7 @@ const STRINGS: Record<Lang, Strings> = {
     devRepo: 'GitHub',
     devSteps: [
       'এটি একটি ছোট স্বাক্ষরিত HTTP API (SKS1) সহ একটি Node প্রসেস।',
-      '{repo}-এ সোর্স কোড।',
+      '{repo} থেকে সোর্স কোড নিন।',
       'নিজের হোস্টে চালান এবং এর ঠিকানা একই সেটিংস স্ক্রিনে দিন।',
     ],
     copy: 'কপি করুন',
@@ -358,6 +358,25 @@ const CLOUD_LOGO = `<svg class="cloud" viewBox="0 0 200 140" width="200" height=
 <path d="M56 122c-22 0-40-16-40-37 0-19 14-34 33-36C56 28 75 16 98 16c26 0 48 17 52 40 20 2 36 18 36 37 0 16-13 29-30 29H56z" fill="var(--item)" stroke="var(--primary)" stroke-width="4" stroke-linejoin="round"/>
 <image href="/icon-128.png" x="64" y="36" width="72" height="72"/>
 </svg>`;
+
+// Card icons as on the site's scenario tiles (.card-icon: glyph in a
+// square tinted with its colour). Material Design Icons paths.
+const CARD_ICONS = {
+  how: {
+    color: 'var(--primary)',
+    path: 'M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z',
+  },
+  user: {
+    color: '#00BCD4',
+    path: 'M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z',
+  },
+  dev: {
+    color: '#F2C14E',
+    path: 'M4,1H20A1,1 0 0,1 21,2V6A1,1 0 0,1 20,7H4A1,1 0 0,1 3,6V2A1,1 0 0,1 4,1M4,9H20A1,1 0 0,1 21,10V14A1,1 0 0,1 20,15H4A1,1 0 0,1 3,14V10A1,1 0 0,1 4,9M4,17H20A1,1 0 0,1 21,18V22A1,1 0 0,1 20,23H4A1,1 0 0,1 3,22V18A1,1 0 0,1 4,17M9,5A1,1 0 0,0 10,4A1,1 0 0,0 9,3A1,1 0 0,0 8,4A1,1 0 0,0 9,5M9,13A1,1 0 0,0 10,12A1,1 0 0,0 9,11A1,1 0 0,0 8,12A1,1 0 0,0 9,13M9,21A1,1 0 0,0 10,20A1,1 0 0,0 9,19A1,1 0 0,0 8,20A1,1 0 0,0 9,21M5,4H7V3H5V4M5,12H7V11H5V12M5,20H7V19H5V20Z',
+  },
+};
+const cardIcon = (id: keyof typeof CARD_ICONS) =>
+  `<div class="card-icon" style="--icon-color:${CARD_ICONS[id].color}"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${CARD_ICONS[id].path}"></path></svg></div>`;
 
 const COPY_SVG =
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
@@ -411,6 +430,7 @@ p{margin:0 0 16px}
 .cards{display:grid;gap:12px;margin:24px 0}
 .card{background:var(--item);border:1px solid var(--separator);border-radius:14px;padding:16px 18px}
 .card h2{font-size:16px;margin:0 0 6px}
+.card-icon{--icon-color:var(--primary);width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--icon-color) 12%,transparent);color:var(--icon-color);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
 .pill,.addr{display:inline-block;border-radius:999px;background:color-mix(in srgb,var(--text) 10%,transparent);color:var(--text);padding:0 8px;line-height:1.6}
 .pill{white-space:nowrap}
 .addr{display:inline-flex;align-items:center;gap:2px;max-width:100%;padding:0 2px 0 10px;vertical-align:middle;margin-top:4px}
@@ -453,9 +473,9 @@ ${CLOUD_LOGO}
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
 <div class="notice" id="status" hidden role="status"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg><span id="status-text"></span></div>
 <div class="cards">
-<section class="card"><h2 data-i18n="how">${escape(t.how)}</h2>${list('what', t.what)}</section>
-<section class="card"><h2 data-i18n="user">${escape(t.user)}</h2>${list('user-steps', t.userSteps)}</section>
-<section class="card"><h2 data-i18n="dev">${escape(t.dev)}</h2>${list('dev-steps', t.devSteps)}</section>
+<section class="card">${cardIcon('how')}<h2 data-i18n="how">${escape(t.how)}</h2>${list('what', t.what)}</section>
+<section class="card">${cardIcon('user')}<h2 data-i18n="user">${escape(t.user)}</h2>${list('user-steps', t.userSteps)}</section>
+<section class="card">${cardIcon('dev')}<h2 data-i18n="dev">${escape(t.dev)}</h2>${list('dev-steps', t.devSteps)}</section>
 </div>
 <footer>
 <a id="link-protocol" href="${links[lang]!.protocol}" target="_blank" rel="noopener" data-i18n="protocol">${escape(t.protocol)}</a>

@@ -1,0 +1,19 @@
+# `docker compose up -d` next to a .env (template: .env.example; an empty .env
+# works, every value has a default). The port is published on localhost only:
+# put a TLS reverse proxy in front (nginx, Caddy, Synology DSM) and forward
+# https://your-host/ to http://127.0.0.1:4323/. Objects live in ./data.
+services:
+  storage:
+    build: .
+    image: sk_storage:latest
+    container_name: sk_storage
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4323
+      DATA_DIR: /data
+    ports:
+      - '127.0.0.1:4323:4323'
+    volumes:
+      - ./data:/data

@@ -20,13 +20,13 @@
 | Сеть | DNS A/AAAA `storage.secretkeeper.net` и `storage-test.secretkeeper.net` на VM. Наружу открыты только 80/443; контейнеры слушают `127.0.0.1:4323` и `127.0.0.1:4324` |
 | TLS | nginx + Let's Encrypt (`certbot --nginx`). Конфиг - `nginx.conf.example` и сниппет `nginx_proxy.conf.example` |
 | Время | **NTP обязателен** (`timedatectl` → `System clock synchronized: yes`). Каждый запрос подписан с меткой времени клиента, сервер принимает расхождение не больше 5 минут: ушедшие часы сервера отрубают всех пользователей сразу |
-| Git | Доступ к репозиторию `lashin/secret_keeper_storage` на внутреннем GitLab (зеркало публичного GitHub) - для клона и webhook |
+| Git | Доступ к `https://hubble.molot.ru/lashin/secret_keeper_storage` (внутренний GitLab, зеркало публичного [github.com/Paymaster-Technologies/sk-storage](https://github.com/Paymaster-Technologies/sk-storage)) - для клона и webhook. Репозиторий приватный: deploy-ключ или пользователь сборщика, как у сайтов |
 
 ## 2. Первый запуск
 
 ```sh
 sudo mkdir -p /srv && cd /srv
-sudo git clone <url внутреннего GitLab>/lashin/secret_keeper_storage.git sk_storage
+sudo git clone https://hubble.molot.ru/lashin/secret_keeper_storage.git sk_storage
 cd sk_storage
 
 # Данные - на отдельном томе; каталоги должны принадлежать uid 1000

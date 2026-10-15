@@ -1,5 +1,7 @@
 node_modules/
 dist/
 data/
+data-test/
 .env
+.env.test
 .deploy.env

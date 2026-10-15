@@ -1,0 +1,15 @@
+# Proxy settings shared by the prod and test server blocks of
+# nginx.conf.example. Install as /etc/nginx/snippets/sk_storage_proxy.conf.
+proxy_http_version 1.1;
+proxy_set_header Host              $host;
+proxy_set_header X-Real-IP         $remote_addr;
+proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+# Stream bodies both ways: the server hashes the upload as it arrives and
+# checks the signature against the real body before making it visible.
+proxy_request_buffering off;
+proxy_buffering off;
+proxy_connect_timeout 10s;
+proxy_send_timeout    600s;
+proxy_read_timeout    600s;
+send_timeout          600s;

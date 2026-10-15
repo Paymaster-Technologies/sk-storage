@@ -19,8 +19,10 @@ docker compose up -d        # listens on 127.0.0.1:4323, objects in ./data
 
 Put a TLS reverse proxy in front and forward `https://storage.example.com/`
 to `http://127.0.0.1:4323/`. Make sure the proxy allows request bodies of at
-least `MAX_OBJECT_BYTES` (nginx: `client_max_body_size 512m;`) and does not
-time out long uploads.
+least `MAX_OBJECT_BYTES` (nginx: `client_max_body_size 512m;`), streams them
+instead of buffering, and does not time out long uploads. A ready nginx
+config is in `nginx.conf.example` + `nginx_proxy.conf.example`; the full
+walkthrough for a Linux VM (disk, NTP, certbot, updates) is `DEPLOY.md`.
 
 Without Docker: Node 22+, `npm ci && npm run build && DATA_DIR=./data npm start`.
 
@@ -131,10 +133,21 @@ npm test            # vitest
 npm run dev         # tsx src/server.ts on :4323 with DATA_DIR=/data (set your own)
 ```
 
-`deploy.sh` ships the sources to a Synology NAS over SSH and rebuilds the
-container there (`NAS=user@host ./deploy.sh`, or put `NAS` and `NAS_DIR`
-in a gitignored `.deploy.env`). It is written for DSM but shows the steps
-for any Docker host.
+Two ways to put a build on a host:
+
+- `deploy_vm.sh` runs **on** a Linux VM that has this repo cloned: fetch,
+  fast-forward, `docker compose build`, `up -d`, `healthz`. A push hook can
+  call it (`DEPLOY.md`). `WITH_TEST=1` also updates the `storage-test`
+  service (compose profile `test`, `.env.test`).
+- `deploy.sh` ships the sources **to** a Synology NAS over SSH and rebuilds
+  the container there (`NAS=user@host ./deploy.sh`, or put `NAS` and
+  `NAS_DIR` in a gitignored `.deploy.env`): the NAS cannot reach git and
+  DSM needs its own sudo paths.
+
+The project's own host is deployed from a mirror of this repo on an
+internal GitLab, so the GitHub remote has a second push URL
+(`git remote set-url --add --push origin <gitlab-url>`): one `git push`
+updates both. `git remote -v` shows whether the clone is set up that way.
 
 ## Storage layout
 

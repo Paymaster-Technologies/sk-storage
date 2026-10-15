@@ -1,0 +1,74 @@
+# storage.secretkeeper.net - nginx in front of the sk_storage container.
+# TLS: certbot --nginx -d storage.secretkeeper.net -d storage-test.secretkeeper.net
+# (certbot fills in the ssl_* lines below). Both hosts share one certificate
+# or get one each; nginx does not care.
+#
+# What matters for the SKS1 protocol, in order of how often it bites:
+#   - client_max_body_size: Vault attachments go up as single PUTs of up to
+#     MAX_OBJECT_BYTES (512 MiB by default). nginx's default is 1m.
+#   - proxy_request_buffering off: the server streams the body to a temp
+#     file and hashes it on the fly; buffering it in nginx first doubles
+#     the disk use and delays the signature check until the whole body is in.
+#   - long timeouts: a 500 MB upload over a phone link takes minutes. The
+#     Node server itself has requestTimeout = 0.
+#   - pass the headers unchanged: X-SK-Storage / X-SK-Time / X-SK-Nonce /
+#     X-SK-Sig are plain hyphenated names, nginx forwards them by default.
+#     Do not enable underscores_in_headers tricks or header rewriting.
+#   - X-Forwarded-Proto: the landing page shows "put this address in the
+#     app" and builds it from this header (http:// would be wrong).
+
+# The proxy settings shared by both server blocks (prod and test differ only
+# in the upstream port) are in nginx_proxy.conf.example; install it as
+# /etc/nginx/snippets/sk_storage_proxy.conf.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name storage.secretkeeper.net storage-test.secretkeeper.net;
+    return 301 https://$host$request_uri;
+}
+
+# Production: docker compose service `storage` on 127.0.0.1:4323.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name storage.secretkeeper.net;
+
+    # ssl_certificate     /etc/letsencrypt/live/storage.secretkeeper.net/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/storage.secretkeeper.net/privkey.pem;
+
+    client_max_body_size 512m;
+    client_body_timeout  600s;
+
+    # The API answers JSON and raw ciphertext; nothing here benefits from
+    # gzip, and compressing encrypted bodies only costs CPU.
+    gzip off;
+
+    location / {
+        proxy_pass http://127.0.0.1:4323;
+        include snippets/sk_storage_proxy.conf;
+    }
+}
+
+# Test host for testers (docker compose --profile test, service
+# `storage-test` on 127.0.0.1:4324, its own .env.test with MAX_STORAGE_IDS=1
+# and a small quota). Same proxy settings; only the upstream differs.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name storage-test.secretkeeper.net;
+
+    # ssl_certificate     /etc/letsencrypt/live/storage.secretkeeper.net/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/storage.secretkeeper.net/privkey.pem;
+
+    client_max_body_size 512m;
+    client_body_timeout  600s;
+    gzip off;
+
+    location / {
+        proxy_pass http://127.0.0.1:4324;
+        include snippets/sk_storage_proxy.conf;
+    }
+}

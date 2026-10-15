@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Deploy to a Synology NAS over SSH: the NAS cannot reach your git, so the
-# sources go over as a tar stream and the image is built there.
+# sources go over as a tar stream and the image is built there. DSM only
+# (sudo paths, synoacltool); a Linux VM with a git checkout uses deploy_vm.sh.
 #   NAS=user@host ./deploy.sh
 #   NAS=user@host NAS_DIR=/volume1/docker/sk_storage ./deploy.sh
 # Or keep NAS / NAS_DIR in .deploy.env next to this script (gitignored).

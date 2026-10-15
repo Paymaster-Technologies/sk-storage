@@ -2,6 +2,12 @@
 # works, every value has a default). The port is published on localhost only:
 # put a TLS reverse proxy in front (nginx, Caddy, Synology DSM) and forward
 # https://your-host/ to http://127.0.0.1:4323/. Objects live in ./data.
+#
+# `docker compose --profile test up -d` additionally starts `storage-test`:
+# the same image with its own .env.test (template .env.test.example) on
+# 127.0.0.1:4324 and ./data-test. It is for the project's public test host
+# (storage-test.secretkeeper.net, MAX_STORAGE_IDS=1, small quota); a
+# self-hosted box does not need it and does not get it without the profile.
 services:
   storage:
     build: .
@@ -17,3 +23,28 @@ services:
       - '127.0.0.1:4323:4323'
     volumes:
       - ./data:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+  storage-test:
+    profiles: [test]
+    image: sk_storage:latest
+    container_name: sk_storage_test
+    restart: unless-stopped
+    env_file: .env.test
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4323
+      DATA_DIR: /data
+    ports:
+      - '127.0.0.1:4324:4323'
+    volumes:
+      - ./data-test:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'

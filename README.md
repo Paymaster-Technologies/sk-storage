@@ -86,7 +86,7 @@ percent-encoded: `/v1/o/.storage/records.sk1e`.
 
 | Request | Result |
 |---|---|
-| `GET /` | landing page for people (HTML in the nine site languages, initial pick by `Accept-Language`, theme and language controls with the site's hotkeys); also `/favicon.ico`, `/icon-*.png`, `/robots.txt` (disallow all) and `/.well-known/security.txt` |
+| `GET /` | landing page for people (HTML in the nine site languages, initial pick by `Accept-Language`, theme and language controls with the site's hotkeys); on hosts listed in `LOGO_HOSTS` (`src/landing.ts`, currently `storage.e-num.com`) only that brand's logo, centred; also `/favicon.ico`, `/icon-*.png`, `/robots.txt` (disallow all) and `/.well-known/security.txt` |
 | `GET /healthz` | `{"ok":true,"time":…}`, no auth |
 | `GET /v1/list` | `[{"path","size","etag","mtime"}]` sorted by path |
 | `GET /v1/usage` | `{"used","quota","maxObject"}` in bytes |

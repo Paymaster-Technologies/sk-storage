@@ -447,6 +447,57 @@ const CLOUD_LOGO = `<svg class="cloud" viewBox="0 0 200 140" width="200" height=
 <image href="/icon-128.png" x="64" y="36" width="72" height="72"/>
 </svg>`;
 
+// Hosts that serve the same API under another product's name get no
+// Secret Keeper landing at all: only that product's logo, centred. The logo
+// is inline SVG, so the page needs nothing else from this process.
+// storage.e-num.com: shield + key mark of E-num (assets/images/enum_logo_login2.svg
+// in the E-num app repository), E-num blue #036cb5.
+const ENUM_LOGO = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 236" width="225" height="236" role="img" aria-label="E-num">
+<path fill="none" d="M185.592,53.014C155.83,52.303 132.398,43.526 112.497,25.48C92.599,43.526 69.168,52.303 39.408,53.014C39.382,55.936 39.324,59.307 39.211,65.182C38.828,85.135 38.908,94.839 39.911,106.477C41.811,128.514 47.005,146.387 56.974,161.509C68.577,179.111 86.564,192.593 112.497,201.763C138.432,192.593 156.42,179.111 168.025,161.509C177.994,146.386 183.189,128.513 185.089,106.476C186.092,94.838 186.172,85.134 185.789,65.181C185.676,59.306 185.618,55.935 185.592,53.014Z" stroke-width="8" stroke="#036cb5"/>
+<g transform="translate(42.630 47.030) scale(0.12734)"><g fill="none" stroke="#036cb5" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" transform="translate(31.04 29.28) scale(1.00461) rotate(45 311.7 280.8)">
+<path fill="#036cb5" stroke="none" d="M522.7 280.8 A211.0 211.0 0 1 0 512.7 345.0 L448.4 345.0 A151.0 151.0 0 1 1 462.7 280.8 Z"/>
+<path stroke-width="60" d="M318.7 280.8 H492.7"/>
+<path d="M561.0 305.0 V267.2 A40.0 40.0 0 0 1 641.0 267.2 V305.0"/>
+<path d="M711.0 230.0 V267.7 A40.0 40.0 0 0 0 791.0 267.7 V230.0"/>
+<path d="M861.0 305.0 V267.2 A40.0 40.0 0 0 1 941.0 267.2 V305.0 M941.0 267.2 A40.0 40.0 0 0 1 1021.0 267.2 V305.0"/>
+<path d="M468.6 371.0 H1053.0"/>
+</g></g>
+</svg>`;
+
+const LOGO_HOSTS: Record<string, { title: string; logo: string }> = {
+  'storage.e-num.com': { title: 'E-num', logo: ENUM_LOGO },
+};
+
+/**
+ * The logo-only page for [host] (Host header, port stripped), or undefined
+ * when the host gets the regular landing.
+ */
+export function logoPageHtml(host: string | undefined): string | undefined {
+  const brand = LOGO_HOSTS[(host ?? '').replace(/:\d+$/, '').toLowerCase()];
+  if (!brand) return undefined;
+  const favicon = `data:image/svg+xml,${encodeURIComponent(brand.logo)}`;
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>${escape(brand.title)}</title>
+<link rel="icon" type="image/svg+xml" href="${favicon}">
+<style>
+:root{color-scheme:light dark}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fff}
+@media(prefers-color-scheme:dark){body{background:rgb(1,1,2)}}
+svg{width:min(60vw,225px);height:auto}
+</style>
+</head>
+<body>
+${brand.logo}
+</body>
+</html>
+`;
+}
+
 // Card icons as on the site's scenario tiles (.card-icon: glyph in a
 // square tinted with its colour). Material Design Icons paths.
 const CARD_ICONS = {

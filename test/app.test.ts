@@ -1,5 +1,5 @@
 import { mkdtemp, readdir, rm } from 'node:fs/promises';
-import { createServer, type Server } from 'node:http';
+import { createServer, request as httpRequest, type Server } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
@@ -53,6 +53,34 @@ describe('storage server', () => {
     const r = await fetch(`${base}/healthz`);
     expect(r.status).toBe(200);
     expect((await r.json()).ok).toBe(true);
+  });
+
+  it('serves only the brand logo at / on storage.e-num.com', async () => {
+    // fetch() refuses to set Host (forbidden header), so go through node:http.
+    const withHost = (path: string, host: string) =>
+      new Promise<{ status: number; type: string; body: string }>((resolve, reject) => {
+        const { port } = server.address() as AddressInfo;
+        httpRequest({ host: '127.0.0.1', port, path, headers: { Host: host } }, (res) => {
+          let body = '';
+          res.setEncoding('utf8');
+          res.on('data', (c: string) => (body += c));
+          res.on('end', () => resolve({ status: res.statusCode ?? 0, type: res.headers['content-type'] ?? '', body }));
+        })
+          .on('error', reject)
+          .end();
+      });
+    const r = await withHost('/', 'storage.e-num.com');
+    expect(r.status).toBe(200);
+    expect(r.type).toBe('text/html; charset=utf-8');
+    expect(r.body).toContain('<title>E-num</title>');
+    expect(r.body).toContain('aria-label="E-num"');
+    expect(r.body).not.toContain('Secret Keeper');
+    expect(r.body).not.toContain('secretkeeper.net');
+    // Port in Host and letter case do not matter; other hosts get the regular landing.
+    expect((await withHost('/', 'Storage.E-num.com:443')).body).toContain('<title>E-num</title>');
+    expect((await withHost('/', 'storage.secretkeeper.net')).body).toContain('Secret Keeper storage');
+    // The API is untouched by the host name.
+    expect(JSON.parse((await withHost('/healthz', 'storage.e-num.com')).body).ok).toBe(true);
   });
 
   it('serves the landing page at / in English by default and Russian on request', async () => {

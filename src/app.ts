@@ -1,6 +1,7 @@
 // HTTP layer: routes, authentication, quotas. No framework, node:http only.
 //
-//   GET    /                        landing page for humans (HTML, en/ru by Accept-Language)
+//   GET    /                        landing page for humans (HTML, language by Accept-Language);
+//                                   on hosts listed in landing.ts LOGO_HOSTS only that brand's logo
 //   GET    /robots.txt, /.well-known/security.txt, /favicon.ico, /icon-32.png, /icon-128.png
 //   GET    /healthz                 liveness, unauthenticated
 //   GET    /v1/list                 [{path,size,etag,mtime}]
@@ -21,7 +22,7 @@ import { pipeline } from 'node:stream/promises';
 import { type AuthFailure, type AuthPending, Authenticator, EMPTY_BODY_SHA256 } from './auth.js';
 import type { Config } from './config.js';
 import { ICON_128_PNG, ICON_32_PNG } from './icons.js';
-import { landingHtml, pickLanguage, ROBOTS_TXT, securityTxt } from './landing.js';
+import { landingHtml, logoPageHtml, pickLanguage, ROBOTS_TXT, securityTxt } from './landing.js';
 import { parseObjectPath } from './paths.js';
 import { type Backend, TooLargeError } from './store/backend.js';
 
@@ -198,6 +199,11 @@ export function createApp(opts: AppOptions): Handler {
     if (method === 'GET' || method === 'HEAD') {
       // Pages for people and crawlers; everything else stays JSON for API clients.
       if (url.pathname === '/') {
+        const logoPage = logoPageHtml(req.headers.host);
+        if (logoPage) {
+          text(res, method, logoPage, 'text/html; charset=utf-8');
+          return;
+        }
         const lang = pickLanguage(req.headers['accept-language']);
         text(res, method, landingHtml(lang, requestOrigin(req)), 'text/html; charset=utf-8', { Vary: 'Accept-Language', 'Content-Language': lang });
         return;

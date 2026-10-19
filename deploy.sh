@@ -49,7 +49,11 @@ ssh "$NAS" "set -e; cd '$NAS_DIR' && [ -f .env ] || { echo 'no .env in $NAS_DIR 
   # mkdir despite chown. Drop the ACL and let plain Linux permissions apply.
   sudo -n /usr/syno/bin/synoacltool -del '$NAS_DIR/data' >/dev/null 2>&1 || true
   sudo -n /bin/chown 1000:1000 '$NAS_DIR/data' && sudo -n /bin/chmod 755 '$NAS_DIR/data'
-  \$C build || { echo 'build failed, old container keeps running'; \$C ps; exit 1; }
+  # Classic sequential builder: BuildKit runs stages in parallel and on a
+  # 2 GB DSM box that OOM-killed dockerd mid-build (seen on the neighbouring
+  # lashin_su deploy). sudo drops environment variables, hence /usr/bin/env.
+  B=\"sudo -n /usr/bin/env DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 \${C#sudo -n }\"
+  \$B build || { echo 'build failed, old container keeps running'; \$C ps; exit 1; }
   # compose 2.20 on DSM once created the container and then failed with
   # \"name already in use\" on the very first deploy; a second up -d adopts it.
   (\$C up -d || \$C up -d) && \$C ps && \

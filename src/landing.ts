@@ -3,8 +3,12 @@
 // A person who opens the storage host in a browser used to get the API's
 // JSON 404 and read it as a broken site. The root now explains in one
 // screen what this host is (ciphertext-only storage for Secret Keeper cloud
-// copies) and where to go (the app, secretkeeper.net). No object listing,
-// no counters: the existence of a storage-id is never shown.
+// copies), why a user would want a copy (restore on a new device by seed
+// phrase, unlike the file export; removal), and where to go (the app,
+// secretkeeper.net). The app's "Learn more" link on the cloud-copy card
+// opens this page, so settings paths and action names repeat the app's
+// labels word for word. No object listing, no counters: the existence of a
+// storage-id is never shown.
 //
 // Palette, language set, theme/language controls and hotkeys follow
 // secretkeeper.net (site/src/layouts/Base.astro, site/src/styles/global.css):
@@ -36,12 +40,24 @@ export const LANGS: { code: Lang; label: string; dir?: 'rtl' }[] = [
 interface Strings {
   title: string;
   lead: string;
+  /** Heading of the "why keep a copy" card: what the user gets out of it. */
+  why: string;
+  /**
+   * Bullets of the why card: restore on a new device by seed phrase, how it
+   * differs from the file export, how to remove it. `{export}` and `{delete}`
+   * are the app's own labels ([exportAction], [deleteAction]) as pills.
+   */
+  whySteps: string[];
+  /** The app's "Export to file" action, word for word as in the app. */
+  exportAction: string;
+  /** The app's "Delete from cloud" action, word for word as in the app. */
+  deleteAction: string;
   /** Heading of the explainer card. */
   how: string;
   /** Bullet points of the explainer card. */
   what: string[];
   user: string;
-  /** The app's settings path, rendered as a pill where `{path}` stands in [userSteps]. */
+  /** The app's settings path, word for word as in the app, rendered as a pill where `{path}` stands in [userSteps]. */
   settingsPath: string;
   /** Bullets of the user card. `{path}` is [settingsPath], `{addr}` the address pill with its copy button. */
   userSteps: string[];
@@ -65,13 +81,21 @@ const STRINGS: Record<Lang, Strings> = {
   en: {
     title: 'Secret Keeper storage',
     lead: 'This host keeps cloud copies of Secret Keeper profiles.',
+    why: 'Why keep a copy?',
+    whySteps: [
+      'Your data lives only on your device. Lose or replace it, and the cloud copy brings everything back to the new device from the seed phrase alone: the app looks for the copy while you set it up.',
+      'Unlike {export} (a .skb file you keep and carry yourself), the copy stays current on its own and keeps all your devices in sync.',
+      'To remove it, tap {delete} on the same screen: the server keeps nothing after that.',
+    ],
+    exportAction: 'Export to file',
+    deleteAction: 'Delete from cloud',
     how: 'How it works',
     what: [
       'Every object here is encrypted on the device before it leaves it.',
       'The server stores ciphertext, authenticates requests by an Ed25519 signature and takes no part in the cryptography: it cannot read, merge or restore anything.',
     ],
     user: 'Want to keep your copy here?',
-    settingsPath: 'Settings → Cloud copy',
+    settingsPath: 'Settings → Data → Cloud copy',
     userSteps: [
       'In the app open {path} and paste this server address: {addr}',
       'Devices on the same seed phrase sync through it on their own.',
@@ -94,13 +118,21 @@ const STRINGS: Record<Lang, Strings> = {
   ru: {
     title: 'Хранилище Secret Keeper',
     lead: 'Здесь живут облачные копии профилей Secret Keeper.',
+    why: 'Зачем нужна копия?',
+    whySteps: [
+      'Ваши данные живут только на вашем устройстве. Потеряли или сменили его: облачная копия вернёт всё на новое устройство по одной seed-фразе, приложение само найдёт копию при настройке.',
+      'В отличие от {export} (файл .skb, который вы храните и переносите сами), копия поддерживает себя в актуальном состоянии и синхронизирует все ваши устройства.',
+      'Чтобы убрать её, нажмите {delete} на том же экране: после этого на сервере не остаётся ничего.',
+    ],
+    exportAction: 'Экспорт в файл',
+    deleteAction: 'Удалить из облака',
     how: 'Как это работает',
     what: [
       'Каждый объект шифруется на устройстве до того, как его покинет.',
       'Сервер хранит шифртекст, проверяет подпись Ed25519 на запросах и в криптографии не участвует: прочитать, слить или восстановить что-либо он не может.',
     ],
     user: 'Хотите хранить копию здесь?',
-    settingsPath: 'Настройки → Облачная копия',
+    settingsPath: 'Настройки → Данные → Облачная копия',
     userSteps: [
       'В приложении откройте {path} и вставьте адрес этого сервера: {addr}',
       'Устройства с одной seed-фразой синхронизируются через него сами.',
@@ -123,13 +155,21 @@ const STRINGS: Record<Lang, Strings> = {
   es: {
     title: 'Almacenamiento de Secret Keeper',
     lead: 'Aquí viven las copias en la nube de los perfiles de Secret Keeper.',
+    why: '¿Para qué sirve la copia?',
+    whySteps: [
+      'Sus datos viven solo en su dispositivo. Si lo pierde o lo cambia, la copia en la nube lo devuelve todo al dispositivo nuevo con solo la frase semilla: la aplicación busca la copia durante la configuración.',
+      'A diferencia de {export} (un archivo .skb que usted guarda y traslada por su cuenta), la copia se mantiene al día por sí sola y sincroniza todos sus dispositivos.',
+      'Para quitarla, pulse {delete} en la misma pantalla: después de eso el servidor no conserva nada.',
+    ],
+    exportAction: 'Exportar a archivo',
+    deleteAction: 'Eliminar de la nube',
     how: 'Cómo funciona',
     what: [
       'Cada objeto se cifra en el dispositivo antes de salir de él.',
       'El servidor guarda texto cifrado, autentica las solicitudes con una firma Ed25519 y no participa en la criptografía: no puede leer, fusionar ni restaurar nada.',
     ],
     user: '¿Quiere guardar su copia aquí?',
-    settingsPath: 'Ajustes → Copia en la nube',
+    settingsPath: 'Ajustes → Datos → Copia en la nube',
     userSteps: [
       'En la aplicación abra {path} y pegue la dirección de este servidor: {addr}',
       'Los dispositivos con la misma frase semilla se sincronizan a través de él por sí solos.',
@@ -152,13 +192,21 @@ const STRINGS: Record<Lang, Strings> = {
   pt: {
     title: 'Armazenamento do Secret Keeper',
     lead: 'Aqui ficam as cópias na nuvem dos perfis do Secret Keeper.',
+    why: 'Para que serve a cópia?',
+    whySteps: [
+      'Os seus dados vivem apenas no seu dispositivo. Se o perder ou trocar, a cópia na nuvem devolve tudo ao novo dispositivo só com a frase semente: a aplicação procura a cópia durante a configuração.',
+      'Ao contrário de {export} (um ficheiro .skb que guarda e transporta por si), a cópia mantém-se atualizada sozinha e sincroniza todos os seus dispositivos.',
+      'Para a remover, toque em {delete} no mesmo ecrã: depois disso o servidor não guarda nada.',
+    ],
+    exportAction: 'Exportar para ficheiro',
+    deleteAction: 'Apagar da nuvem',
     how: 'Como funciona',
     what: [
       'Cada objeto é cifrado no dispositivo antes de sair dele.',
       'O servidor guarda texto cifrado, autentica os pedidos por assinatura Ed25519 e não participa na criptografia: não consegue ler, fundir nem restaurar nada.',
     ],
     user: 'Quer guardar a sua cópia aqui?',
-    settingsPath: 'Definições → Cópia na nuvem',
+    settingsPath: 'Definições → Dados → Cópia na nuvem',
     userSteps: [
       'Na aplicação abra {path} e cole o endereço deste servidor: {addr}',
       'Os dispositivos com a mesma frase semente sincronizam-se através dele sozinhos.',
@@ -181,13 +229,21 @@ const STRINGS: Record<Lang, Strings> = {
   fr: {
     title: 'Stockage Secret Keeper',
     lead: 'Ici vivent les copies cloud des profils Secret Keeper.',
+    why: 'À quoi sert la copie ?',
+    whySteps: [
+      "Vos données ne vivent que sur votre appareil. Perdu ou remplacé : la copie cloud remet tout sur le nouvel appareil à partir de la seule phrase de récupération, l'application cherche la copie pendant la configuration.",
+      'Contrairement à {export} (un fichier .skb que vous gardez et déplacez vous-même), la copie reste à jour d\'elle-même et synchronise tous vos appareils.',
+      'Pour la retirer, touchez {delete} sur le même écran : le serveur ne garde ensuite plus rien.',
+    ],
+    exportAction: 'Exporter vers un fichier',
+    deleteAction: 'Supprimer du cloud',
     how: 'Comment ça marche',
     what: [
       "Chaque objet est chiffré sur l'appareil avant de le quitter.",
       'Le serveur stocke du texte chiffré, authentifie les requêtes par une signature Ed25519 et ne participe pas à la cryptographie : il ne peut rien lire, fusionner ni restaurer.',
     ],
     user: 'Vous voulez garder votre copie ici ?',
-    settingsPath: 'Réglages → Copie cloud',
+    settingsPath: 'Réglages → Données → Copie dans le cloud',
     userSteps: [
       'Dans l\'application, ouvrez {path} et collez l\'adresse de ce serveur : {addr}',
       'Les appareils partageant la même phrase de récupération se synchronisent via lui d\'eux-mêmes.',
@@ -210,13 +266,21 @@ const STRINGS: Record<Lang, Strings> = {
   tr: {
     title: 'Secret Keeper depolama',
     lead: 'Secret Keeper profillerinin bulut kopyaları burada yaşar.',
+    why: 'Kopya ne işe yarar?',
+    whySteps: [
+      'Verileriniz yalnızca cihazınızda yaşar. Cihazı kaybeder ya da değiştirirseniz bulut kopyası her şeyi yalnızca tohum ifadesiyle yeni cihaza geri getirir: uygulama kurulum sırasında kopyayı kendisi arar.',
+      '{export} seçeneğinden (kendi sakladığınız ve taşıdığınız bir .skb dosyası) farklı olarak kopya kendini güncel tutar ve tüm cihazlarınızı eşitler.',
+      'Kaldırmak için aynı ekranda {delete} seçeneğine dokunun: ardından sunucuda hiçbir şey kalmaz.',
+    ],
+    exportAction: 'Dosyaya aktar',
+    deleteAction: 'Buluttan sil',
     how: 'Nasıl çalışır',
     what: [
       'Her nesne cihazdan ayrılmadan önce cihazda şifrelenir.',
       'Sunucu şifreli metni saklar, istekleri Ed25519 imzasıyla doğrular ve kriptografiye katılmaz: hiçbir şeyi okuyamaz, birleştiremez veya geri yükleyemez.',
     ],
     user: 'Kopyanızı burada tutmak ister misiniz?',
-    settingsPath: 'Ayarlar → Bulut kopyası',
+    settingsPath: 'Ayarlar → Veriler → Bulut kopyası',
     userSteps: [
       'Uygulamada {path} bölümünü açın ve bu sunucunun adresini yapıştırın: {addr}',
       'Aynı tohum ifadesine sahip cihazlar onun üzerinden kendiliğinden eşitlenir.',
@@ -239,13 +303,21 @@ const STRINGS: Record<Lang, Strings> = {
   ar: {
     title: 'تخزين Secret Keeper',
     lead: 'هنا تُحفظ النسخ السحابية لملفات Secret Keeper الشخصية.',
+    why: 'ما فائدة النسخة؟',
+    whySteps: [
+      'بياناتك موجودة على جهازك فقط. إذا فقدته أو استبدلته، تعيد النسخة السحابية كل شيء إلى الجهاز الجديد بعبارة البذرة وحدها: يبحث التطبيق عن النسخة أثناء الإعداد.',
+      'بخلاف {export} (ملف ‎.skb تحتفظ به وتنقله بنفسك)، تبقى النسخة محدّثة تلقائيًا وتزامن جميع أجهزتك.',
+      'لإزالتها اضغط {delete} في الشاشة نفسها: بعد ذلك لا يحتفظ الخادم بأي شيء.',
+    ],
+    exportAction: 'تصدير إلى ملف',
+    deleteAction: 'حذف من السحابة',
     how: 'كيف يعمل',
     what: [
       'يُشفَّر كل كائن على الجهاز قبل أن يغادره.',
       'يخزّن الخادم النص المشفّر، ويتحقق من الطلبات بتوقيع Ed25519، ولا يشارك في التشفير: لا يمكنه قراءة أي شيء أو دمجه أو استعادته.',
     ],
     user: 'هل تريد حفظ نسختك هنا؟',
-    settingsPath: 'الإعدادات ← النسخة السحابية',
+    settingsPath: 'الإعدادات ← البيانات ← نسخة سحابية',
     userSteps: [
       'في التطبيق افتح {path} والصق عنوان هذا الخادم: {addr}',
       'الأجهزة التي تشترك في عبارة البذرة نفسها تتزامن عبره تلقائيًا.',
@@ -268,13 +340,21 @@ const STRINGS: Record<Lang, Strings> = {
   fa: {
     title: 'فضای ذخیره‌سازی Secret Keeper',
     lead: 'نسخه‌های ابری پروفایل‌های Secret Keeper اینجا نگهداری می‌شوند.',
+    why: 'نسخه به چه کار می‌آید؟',
+    whySteps: [
+      'داده‌های شما فقط روی دستگاه خودتان است. اگر آن را گم یا عوض کنید، نسخهٔ ابری همه‌چیز را تنها با عبارت بازیابی به دستگاه جدید برمی‌گرداند: برنامه هنگام راه‌اندازی خودش نسخه را پیدا می‌کند.',
+      'برخلاف {export} (فایل ‎.skb که خودتان نگه می‌دارید و جابه‌جا می‌کنید)، نسخه خودش به‌روز می‌ماند و همهٔ دستگاه‌هایتان را همگام می‌کند.',
+      'برای حذف آن در همان صفحه {delete} را بزنید: پس از آن چیزی روی سرور نمی‌ماند.',
+    ],
+    exportAction: 'برون‌بری به فایل',
+    deleteAction: 'حذف از ابر',
     how: 'چطور کار می‌کند',
     what: [
       'هر شیء پیش از خروج از دستگاه روی همان دستگاه رمزگذاری می‌شود.',
       'سرور متن رمزشده را نگه می‌دارد، درخواست‌ها را با امضای Ed25519 احراز می‌کند و در رمزنگاری نقشی ندارد: نمی‌تواند چیزی را بخواند، ادغام کند یا بازیابی کند.',
     ],
     user: 'می‌خواهید نسخه‌تان را اینجا نگه دارید؟',
-    settingsPath: 'تنظیمات ← نسخه ابری',
+    settingsPath: 'تنظیمات ← داده‌ها ← نسخهٔ ابری',
     userSteps: [
       'در برنامه {path} را باز کنید و نشانی این سرور را بچسبانید: {addr}',
       'دستگاه‌هایی با یک عبارت بازیابی از طریق آن خودبه‌خود همگام می‌شوند.',
@@ -297,13 +377,21 @@ const STRINGS: Record<Lang, Strings> = {
   bn: {
     title: 'Secret Keeper স্টোরেজ',
     lead: 'Secret Keeper প্রোফাইলের ক্লাউড কপি এখানে থাকে।',
+    why: 'কপি কেন দরকার?',
+    whySteps: [
+      'আপনার ডেটা শুধু আপনার ডিভাইসেই থাকে। ডিভাইস হারালে বা বদলালে ক্লাউড কপি শুধু সিড ফ্রেজ দিয়েই সব নতুন ডিভাইসে ফিরিয়ে আনে: সেটআপের সময় অ্যাপ নিজেই কপি খুঁজে নেয়।',
+      '{export} (একটি .skb ফাইল, যা আপনি নিজে রাখেন ও বহন করেন) থেকে ভিন্নভাবে, কপি নিজে থেকেই হালনাগাদ থাকে এবং আপনার সব ডিভাইস সিঙ্ক রাখে।',
+      'সরাতে চাইলে একই স্ক্রিনে {delete} চাপুন: এরপর সার্ভারে কিছুই থাকে না।',
+    ],
+    exportAction: 'ফাইলে রপ্তানি',
+    deleteAction: 'ক্লাউড থেকে মুছুন',
     how: 'এটি কীভাবে কাজ করে',
     what: [
       'প্রতিটি অবজেক্ট ডিভাইস ছাড়ার আগে ডিভাইসেই এনক্রিপ্ট হয়।',
       'সার্ভার শুধু সাইফারটেক্সট রাখে, Ed25519 স্বাক্ষর দিয়ে অনুরোধ যাচাই করে এবং ক্রিপ্টোগ্রাফিতে অংশ নেয় না: কিছু পড়তে, মেলাতে বা পুনরুদ্ধার করতে পারে না।',
     ],
     user: 'আপনার কপি এখানে রাখতে চান?',
-    settingsPath: 'সেটিংস → ক্লাউড কপি',
+    settingsPath: 'সেটিংস → ডেটা → ক্লাউড কপি',
     userSteps: [
       'অ্যাপে {path} খুলুন এবং এই সার্ভারের ঠিকানা পেস্ট করুন: {addr}',
       'একই সিড ফ্রেজের ডিভাইসগুলো এর মাধ্যমে নিজে থেকেই সিঙ্ক হয়।',
@@ -362,6 +450,10 @@ const CLOUD_LOGO = `<svg class="cloud" viewBox="0 0 200 140" width="200" height=
 // Card icons as on the site's scenario tiles (.card-icon: glyph in a
 // square tinted with its colour). Material Design Icons paths.
 const CARD_ICONS = {
+  why: {
+    color: '#4CAF50',
+    path: 'M12,3A9,9 0 0,0 3,12H0L4,16L8,12H5A7,7 0 0,1 12,5A7,7 0 0,1 19,12A7,7 0 0,1 12,19C10.5,19 9.09,18.5 7.94,17.7L6.5,19.14C8.04,20.3 9.94,21 12,21A9,9 0 0,0 21,12A9,9 0 0,0 12,3M14,12A2,2 0 0,0 12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12Z',
+  },
   how: {
     color: 'var(--primary)',
     path: 'M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7C13.4,7 14.8,8.1 14.8,9.5V11C15.4,11 16,11.6 16,12.3V15.8C16,16.4 15.4,17 14.7,17H9.2C8.6,17 8,16.4 8,15.7V12.2C8,11.6 8.6,11 9.2,11V9.5C9.2,8.1 10.6,7 12,7M12,8.2C11.2,8.2 10.5,8.7 10.5,9.5V11H13.5V9.5C13.5,8.7 12.8,8.2 12,8.2Z',
@@ -381,13 +473,16 @@ const cardIcon = (id: keyof typeof CARD_ICONS) =>
 const COPY_SVG =
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
 
-// Inline pieces the card bullets embed via `{path}` / `{addr}` / `{repo}`;
-// the address pill starts its own line.
+// Inline pieces the card bullets embed via `{path}` / `{export}` / `{delete}`
+// (the app's own labels as pills) and `{addr}` / `{repo}`; the address pill
+// starts its own line.
 // One set of templates for the server render and the client's language
 // switch (shipped in the i18n JSON); `{text}` and `{copy}` are filled with
 // escaped strings by [fill].
 const SLOTS = {
   path: '<span class="pill">{text}</span>',
+  export: '<span class="pill">{text}</span>',
+  delete: '<span class="pill">{text}</span>',
   addr: `<br><span class="addr"><code id="addr">{text}</code><button id="copy" class="icon-btn small" title="{copy}" aria-label="{copy}">${COPY_SVG}</button></span>`,
   repo: `<a href="${REPO}" target="_blank" rel="noopener">{text}</a>`,
 };
@@ -402,6 +497,8 @@ export function landingHtml(lang: Lang, origin: string): string {
   const i18n = JSON.stringify({ strings: STRINGS, langs: LANGS, links, slots: SLOTS });
   const slots = {
     path: fill(SLOTS.path, { text: escape(t.settingsPath) }),
+    export: fill(SLOTS.export, { text: escape(t.exportAction) }),
+    delete: fill(SLOTS.delete, { text: escape(t.deleteAction) }),
     addr: fill(SLOTS.addr, { text: escape(origin), copy: escape(t.copy) }),
     repo: fill(SLOTS.repo, { text: escape(t.devRepo) }),
   };
@@ -474,6 +571,7 @@ ${CLOUD_LOGO}
 <p class="lead" data-i18n="lead">${escape(t.lead)}</p>
 <div class="notice" id="status" hidden role="status"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg><span id="status-text"></span></div>
 <div class="cards">
+<section class="card"><header>${cardIcon('why')}<h2 data-i18n="why">${escape(t.why)}</h2></header>${list('why-steps', t.whySteps)}</section>
 <section class="card"><header>${cardIcon('how')}<h2 data-i18n="how">${escape(t.how)}</h2></header>${list('what', t.what)}</section>
 <section class="card"><header>${cardIcon('user')}<h2 data-i18n="user">${escape(t.user)}</h2></header>${list('user-steps', t.userSteps)}</section>
 <section class="card"><header>${cardIcon('dev')}<h2 data-i18n="dev">${escape(t.dev)}</h2></header>${list('dev-steps', t.devSteps)}</section>
@@ -523,8 +621,8 @@ s.hidden=false;x.textContent=health==='down'?t.down:t.skew.replace('{s}',String(
 function applyLang(code){var t=I.strings[code];if(!t)return;lang=code;
 root.lang=code;root.dir=(byId(code)||{}).dir||'ltr';document.title=t.title;
 document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t[el.dataset.i18n]});
-var slots={path:fill(I.slots.path,{text:esc(t.settingsPath)}),addr:fill(I.slots.addr,{text:esc(location.origin),copy:esc(t.copy)}),repo:fill(I.slots.repo,{text:esc(t.devRepo)})};
-renderList('what',t.what,{});renderList('user-steps',t.userSteps,slots);renderList('dev-steps',t.devSteps,slots);
+var slots={path:fill(I.slots.path,{text:esc(t.settingsPath)}),export:fill(I.slots.export,{text:esc(t.exportAction)}),delete:fill(I.slots.delete,{text:esc(t.deleteAction)}),addr:fill(I.slots.addr,{text:esc(location.origin),copy:esc(t.copy)}),repo:fill(I.slots.repo,{text:esc(t.devRepo)})};
+renderList('why-steps',t.whySteps,slots);renderList('what',t.what,{});renderList('user-steps',t.userSteps,slots);renderList('dev-steps',t.devSteps,slots);
 $('link-protocol').href=I.links[code].protocol;$('link-site').href=I.links[code].site;
 var sum=$('lang-summary');sum.setAttribute('aria-label',t.langSwitch);sum.title=t.langSwitch;
 sum.firstChild.textContent=code.charAt(0).toUpperCase()+code.slice(1)+' ';

@@ -88,10 +88,13 @@ describe('storage server', () => {
     expect(html).toContain('href="/icon-128.png"');
     // The address to paste into the app: scheme and host of the request, X-Forwarded-Proto honoured.
     expect(html).toContain(`<code id="addr">${base}</code>`);
-    // Bullets embed the settings path and the address as pills; no placeholder leaks through.
-    expect(html).toContain('<span class="pill">Settings → Cloud copy</span>');
+    // Bullets embed the app's own labels (settings path, actions) and the address as pills; no placeholder leaks through.
+    expect(html).toContain('<span class="pill">Settings → Data → Cloud copy</span>');
     expect(html).toMatch(/<ul id="user-steps"><li>In the app open <span class="pill">/);
-    expect(html.split('<script id="i18n"')[0]).not.toMatch(/\{(path|addr|repo|text|copy)\}/);
+    expect(html).toMatch(/<ul id="why-steps"><li>Your data lives only on your device\./);
+    expect(html).toContain('Unlike <span class="pill">Export to file</span>');
+    expect(html).toContain('tap <span class="pill">Delete from cloud</span>');
+    expect(html.split('<script id="i18n"')[0]).not.toMatch(/\{(path|export|delete|addr|repo|text|copy)\}/);
     const proxied = await fetch(`${base}/`, { headers: { 'X-Forwarded-Proto': 'https' } });
     expect(await proxied.text()).toContain(`<code id="addr">${base.replace('http://', 'https://')}</code>`);
 
